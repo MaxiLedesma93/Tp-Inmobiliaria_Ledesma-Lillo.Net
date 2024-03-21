@@ -37,6 +37,7 @@ public class RepositorioPropietario
 						//Clave = reader.GetString(nameof(Propietario.Clave)),
                     });
                 }
+				connection.Close();
             }
             return propietarios;
         }
@@ -45,16 +46,16 @@ public class RepositorioPropietario
 		public Propietario? ObtenerPropietario(int id)
 		{
 			Propietario? propietario = null;
-
+			
 			using(var connection = new MySqlConnection(connectionString))
         {
-            var sql = @$"Select {nameof(Propietario.IdPropietario)}, {nameof(Propietario.Nombre)}, {nameof(Propietario.Apellido)}, 
-                         {nameof(Propietario.Dni)}, {nameof(Propietario.Telefono)}, {nameof(Propietario.Email)} 
-						  from propietarios 
-						 where {nameof(Propietario.IdPropietario)} = @id";
+            var sql = @$"SELECT {nameof(Propietario.IdPropietario)}, {nameof(Propietario.Nombre)}, {nameof(Propietario.Apellido)}, 
+                        {nameof(Propietario.Dni)}, {nameof(Propietario.Telefono)}, {nameof(Propietario.Email)}
+						FROM propietarios 
+						WHERE {nameof(Propietario.IdPropietario)} = @id";
             using (var command = new MySqlCommand(sql, connection))
             {
-				command.Parameters.AddWithValue($"@{nameof(Propietario.IdPropietario)}",id);
+				command.Parameters.AddWithValue($"@{nameof(Propietario.IdPropietario)}", id);
                 connection.Open();
                 using(var reader = command.ExecuteReader())
 
@@ -70,6 +71,8 @@ public class RepositorioPropietario
 						//Clave = reader.GetString(nameof(Propietario.Clave)),
                     };
                 }
+				connection.Close();
+				
             }
             return propietario;
         }
@@ -112,7 +115,7 @@ public class RepositorioPropietario
 				{nameof(Propietario.Apellido)} = @{nameof(Propietario.Apellido)},
 				{nameof(Propietario.Dni)} = @{nameof(Propietario.Dni)},
 				{nameof(Propietario.Telefono)} = @{nameof(Propietario.Telefono)},
-				{nameof(Propietario.Email)} = @{nameof(Propietario.Email)},
+				{nameof(Propietario.Email)} = @{nameof(Propietario.Email)}
 				
 				WHERE {nameof(Propietario.IdPropietario)} = @{nameof(Propietario.IdPropietario)}";
 			using(var command = new MySqlCommand(sql, connection))
@@ -122,6 +125,7 @@ public class RepositorioPropietario
 				command.Parameters.AddWithValue($"@{nameof(Propietario.Dni)}", propietario.Dni);
 				command.Parameters.AddWithValue($"@{nameof(Propietario.Telefono)}", propietario.Telefono);
 				command.Parameters.AddWithValue($"@{nameof(Propietario.Email)}", propietario.Email);
+				
 				//command.Parameters.AddWithValue($"@{nameof(Propietario.Clave)}", propietario.Clave);
 				connection.Open();
 				command.ExecuteNonQuery();
