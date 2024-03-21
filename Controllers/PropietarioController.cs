@@ -22,6 +22,11 @@ public class PropietarioController : Controller
             RepositorioPropietario rp = new RepositorioPropietario();
             var lista = rp.ObtenerPropietarios();
             ViewBag.id = TempData["id"];
+            // TempData es para pasar datos entre acciones
+				// ViewBag/Data es para pasar datos del controlador a la vista
+				// Si viene alguno valor por el tempdata, lo paso al viewdata/viewbag
+				if (TempData.ContainsKey("Mensaje"))
+					ViewBag.Mensaje = TempData["Mensaje"];
             return View(lista);
         }
         catch(Exception ex)
@@ -38,6 +43,7 @@ public class PropietarioController : Controller
             {
                 RepositorioPropietario rp = new RepositorioPropietario();
                 var propietario = rp.ObtenerPropietario(id);
+                TempData["Mensaje"] = "Datos guardados correctamente";
                 return View(propietario);
             }
             else

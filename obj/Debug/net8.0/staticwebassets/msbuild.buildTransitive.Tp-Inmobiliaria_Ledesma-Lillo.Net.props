@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\Tp-Inmobiliaria_Ledesma-Lillo.Net.props" />
-</Project>
