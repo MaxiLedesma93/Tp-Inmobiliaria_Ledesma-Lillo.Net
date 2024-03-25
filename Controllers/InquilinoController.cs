@@ -15,7 +15,7 @@ public class InquilinoController : Controller
         _logger = logger;
     }
 
-    public IActionResult ListadoInquilinos()
+    public IActionResult Listado()
     {
         try
         {
@@ -49,7 +49,7 @@ public class InquilinoController : Controller
         }
     }
 
-    public IActionResult CrearInquilino() //carga el formulario vacio
+    public IActionResult Crear() //carga el formulario vacio
 		{
 			try
 			{
@@ -81,7 +81,7 @@ public class InquilinoController : Controller
            {
             return View(inquilino); 
            }
-            return RedirectToAction(nameof(ListadoInquilinos));
+            return RedirectToAction(nameof(Listado));
         }
         catch(Exception ex)
         {
@@ -97,7 +97,7 @@ public class InquilinoController : Controller
         {
             rp.EliminaInquilino(id);
             TempData["Mensaje"] = "Eliminación realizada correctamente";
-            return RedirectToAction(nameof(ListadoInquilinos));
+            return RedirectToAction(nameof(Listado));
         }
         catch(Exception ex)
         {

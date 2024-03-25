@@ -26,24 +26,36 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/Documents/GitHub/Tp-Inmobiliaria_Ledesma-Lillo.Net/Views/Inquilino/CrearInquilino.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5xdWlsaW5vXENyZWFySW5xdWlsaW5vLmNzaHRtbA==
+[C:/Users/Usuario/Documents/GitHub/Tp-Inmobiliaria_Ledesma-Lillo.Net/Views/Inmueble/Crear.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5tdWVibGVcQ3JlYXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/Documents/GitHub/Tp-Inmobiliaria_Ledesma-Lillo.Net/Views/Inquilino/EditarInquilino.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5xdWlsaW5vXEVkaXRhcklucXVpbGluby5jc2h0bWw=
+[C:/Users/Usuario/Documents/GitHub/Tp-Inmobiliaria_Ledesma-Lillo.Net/Views/Inmueble/Guardar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5tdWVibGVcR3VhcmRhci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/Documents/GitHub/Tp-Inmobiliaria_Ledesma-Lillo.Net/Views/Inquilino/EliminarInquilino.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5xdWlsaW5vXEVsaW1pbmFySW5xdWlsaW5vLmNzaHRtbA==
+[C:/Users/Usuario/Documents/GitHub/Tp-Inmobiliaria_Ledesma-Lillo.Net/Views/Inmueble/Listado.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5tdWVibGVcTGlzdGFkby5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/Documents/GitHub/Tp-Inmobiliaria_Ledesma-Lillo.Net/Views/Inquilino/GuardarInquilino.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5xdWlsaW5vXEd1YXJkYXJJbnF1aWxpbm8uY3NodG1s
+[C:/Users/Usuario/Documents/GitHub/Tp-Inmobiliaria_Ledesma-Lillo.Net/Views/Inquilino/Crear.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5xdWlsaW5vXENyZWFyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/Documents/GitHub/Tp-Inmobiliaria_Ledesma-Lillo.Net/Views/Inquilino/ListadoInquilino.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5xdWlsaW5vXExpc3RhZG9JbnF1aWxpbm8uY3NodG1s
+[C:/Users/Usuario/Documents/GitHub/Tp-Inmobiliaria_Ledesma-Lillo.Net/Views/Inquilino/Editar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5xdWlsaW5vXEVkaXRhci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Usuario/Documents/GitHub/Tp-Inmobiliaria_Ledesma-Lillo.Net/Views/Inquilino/Eliminar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5xdWlsaW5vXEVsaW1pbmFyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Usuario/Documents/GitHub/Tp-Inmobiliaria_Ledesma-Lillo.Net/Views/Inquilino/Guardar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5xdWlsaW5vXEd1YXJkYXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Usuario/Documents/GitHub/Tp-Inmobiliaria_Ledesma-Lillo.Net/Views/Inquilino/Listado.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5xdWlsaW5vXExpc3RhZG8uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Usuario/Documents/GitHub/Tp-Inmobiliaria_Ledesma-Lillo.Net/Views/Propietario/Crear.cshtml]

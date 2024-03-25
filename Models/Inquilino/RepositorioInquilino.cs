@@ -126,7 +126,6 @@ public class RepositorioInquilino
 				command.Parameters.AddWithValue($"@{nameof(Inquilino.Telefono)}", inquilino.Telefono);
 				command.Parameters.AddWithValue($"@{nameof(Inquilino.Email)}", inquilino.Email);
 				
-				//command.Parameters.AddWithValue($"@{nameof(Inquilino.Clave)}", inquilino.Clave);
 				connection.Open();
 				command.ExecuteNonQuery();
 				connection.Close();

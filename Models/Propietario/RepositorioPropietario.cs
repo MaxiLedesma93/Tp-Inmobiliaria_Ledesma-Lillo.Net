@@ -115,7 +115,7 @@ public class RepositorioPropietario
 				{nameof(Propietario.Apellido)} = @{nameof(Propietario.Apellido)},
 				{nameof(Propietario.Dni)} = @{nameof(Propietario.Dni)},
 				{nameof(Propietario.Telefono)} = @{nameof(Propietario.Telefono)},
-				{nameof(Propietario.Email)} = @{nameof(Propietario.Email)}
+				{nameof(Propietario.Email)} = @{nameof(Propietario.Email)},
 				{nameof(Propietario.Clave)} = @{nameof(Propietario.Clave)}
 				WHERE {nameof(Propietario.IdPropietario)} = @{nameof(Propietario.IdPropietario)}";
 			using(var command = new MySqlCommand(sql, connection))
