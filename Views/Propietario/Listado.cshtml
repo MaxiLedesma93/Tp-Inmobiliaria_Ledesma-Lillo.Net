@@ -7,7 +7,7 @@
 	<h1>Propietarios</h1>
 
 <p>
-    <a asp-action="Crear">Nuevo Propietario</a>
+    <a asp-action="Crear" title="Agregar Nuevo"><i class="btn btn-primary fa-solid fa-square-plus"></i></a>
 </p>
 <table class="table">
     <thead>
@@ -49,9 +49,12 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
 			<td>
-				<a asp-action="Editar" asp-route-id="@item.IdPropietario" title="Editar"><span>Editar</span></a>&nbsp;
-				<a asp-action="Eliminar" asp-route-id="@item.IdPropietario" title="Eliminar"><span>Eliminar</span></a>
+				<a asp-action="Editar" asp-route-id="@item.IdPropietario" title="Editar" class="btn btn-primary"><i class="fa-solid fa-square-pen"></i></a>
+				
 			</td>
+            <td>
+                <a asp-action="Eliminar" asp-route-id="@item.IdPropietario" title="Eliminar" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></a>
+            </td>
         </tr>
 }
     </tbody>

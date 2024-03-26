@@ -54,7 +54,7 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models
                            {nameof(Inmueble.Ambientes)}, {nameof(Inmueble.Direccion)}, {nameof(Inmueble.Uso)}, {nameof(Inmueble.Latitud)},
                            {nameof(Inmueble.Longitud)}, {nameof(Inmueble.Superficie)} 
                            from inmuebles i INNER JOIN propietarios p ON i.PropietarioId = p.IdPropietario
-                            WHERE {nameof(Inmueble.IdInmueble)} = @id";
+                            WHERE {nameof(Inmueble.IdInmueble)} = @{nameof(Inmueble.IdInmueble)}";
                 using (var command = new MySqlCommand(sql, connection))
                 {
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.IdInmueble)}", id);
@@ -86,10 +86,9 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models
                 int id = 0;
             using(var connection = new MySqlConnection(connectionString))
             {
-                var sql = @$"INSERT INTO inmuebles {nameof(Inmueble.PropietarioId)},
-                           {nameof(Inmueble.Ambientes)}, {nameof(Inmueble.Direccion)}, 
+                var sql = @$"INSERT INTO inmuebles ({nameof(Inmueble.Ambientes)}, {nameof(Inmueble.Direccion)}, 
                            {nameof(Inmueble.Uso)}, {nameof(Inmueble.Latitud)},
-                           {nameof(Inmueble.Longitud)}, {nameof(Inmueble.Superficie)}
+                           {nameof(Inmueble.Longitud)}, {nameof(Inmueble.Superficie)},{nameof(Inmueble.PropietarioId)})
                     VALUES (@{nameof(Inmueble.PropietarioId)}, @{nameof(Inmueble.Ambientes)}, 
                             @{nameof(Inmueble.Direccion)}, @{nameof(Inmueble.Uso)}, @{nameof(Inmueble.Latitud)},
                             @{nameof(Inmueble.Longitud)}, @{nameof(Inmueble.Superficie)});
@@ -103,6 +102,7 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.Latitud)}", inmueble.Latitud);
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.Longitud)}", inmueble.Longitud);
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.Superficie)}", inmueble.Superficie);
+                //    command.Parameters.AddWithValue($"@{nameof(Inmueble.IdInmueble)}", inmueble.IdInmueble);
                     connection.Open();
                     id = Convert.ToInt32(command.ExecuteScalar());
                     inmueble.IdInmueble = id;

@@ -75,11 +75,12 @@ public class InmuebleController : Controller
            {
                 if(inmueble.IdInmueble > 0)
                 {
-                rinmu.ModificaInmueble(inmueble);
+                    rinmu.ModificaInmueble(inmueble);
                 }
                 else{
-                rinmu.AltaInmueble(inmueble);
-                TempData["id"] = inmueble.IdInmueble; 
+                    
+                    rinmu.AltaInmueble(inmueble);
+                    TempData["id"] = inmueble.IdInmueble; 
                 }
            }
            else 

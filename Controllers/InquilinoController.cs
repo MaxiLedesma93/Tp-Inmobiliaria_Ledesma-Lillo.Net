@@ -63,18 +63,18 @@ public class InquilinoController : Controller
 
     public IActionResult Guardar(Inquilino inquilino)
     {
-        RepositorioInquilino rp = new RepositorioInquilino();
+        RepositorioInquilino ri = new RepositorioInquilino();
         try
         {
            if(ModelState.IsValid)
            {
                 if(inquilino.IdInquilino > 0)
                 {
-                rp.ModificaInquilino(inquilino);
+                    ri.ModificaInquilino(inquilino);
                 }
                 else{
-                rp.AltaInquilino(inquilino);
-                TempData["id"] = inquilino.IdInquilino; 
+                    ri.AltaInquilino(inquilino);
+                    TempData["id"] = inquilino.IdInquilino; 
                 }
            }
            else 

@@ -52,7 +52,7 @@ public class RepositorioInquilino
             var sql = @$"SELECT {nameof(Inquilino.IdInquilino)}, {nameof(Inquilino.Nombre)}, {nameof(Inquilino.Apellido)}, 
                         {nameof(Inquilino.Dni)}, {nameof(Inquilino.Telefono)}, {nameof(Inquilino.Email)}
 						FROM inquilinos 
-						WHERE {nameof(Inquilino.IdInquilino)} = @id";
+						WHERE {nameof(Inquilino.IdInquilino)} = @{nameof(Inquilino.IdInquilino)}";
             using (var command = new MySqlCommand(sql, connection))
             {
 				command.Parameters.AddWithValue($"@{nameof(Inquilino.IdInquilino)}", id);
@@ -84,7 +84,7 @@ public class RepositorioInquilino
 		using(var connection = new MySqlConnection(connectionString))
 		{
 			var sql = @$"INSERT INTO inquilinos ({nameof(Inquilino.Nombre)}, {nameof(Inquilino.Apellido)}, {nameof(Inquilino.Dni)},
-			{nameof(Inquilino.Telefono)}, {nameof(Inquilino.Email)})
+				{nameof(Inquilino.Telefono)}, {nameof(Inquilino.Email)})
 				VALUES (@{nameof(Inquilino.Nombre)}, @{nameof(Inquilino.Apellido)}, @{nameof(Inquilino.Dni)},
 				@{nameof(Inquilino.Telefono)}, @{nameof(Inquilino.Email)});
 				SELECT LAST_INSERT_ID();";
@@ -116,7 +116,6 @@ public class RepositorioInquilino
 				{nameof(Inquilino.Dni)} = @{nameof(Inquilino.Dni)},
 				{nameof(Inquilino.Telefono)} = @{nameof(Inquilino.Telefono)},
 				{nameof(Inquilino.Email)} = @{nameof(Inquilino.Email)}
-				
 				WHERE {nameof(Inquilino.IdInquilino)} = @{nameof(Inquilino.IdInquilino)}";
 			using(var command = new MySqlCommand(sql, connection))
 			{
@@ -125,7 +124,7 @@ public class RepositorioInquilino
 				command.Parameters.AddWithValue($"@{nameof(Inquilino.Dni)}", inquilino.Dni);
 				command.Parameters.AddWithValue($"@{nameof(Inquilino.Telefono)}", inquilino.Telefono);
 				command.Parameters.AddWithValue($"@{nameof(Inquilino.Email)}", inquilino.Email);
-				
+				command.Parameters.AddWithValue($"@{nameof(Inquilino.IdInquilino)}", inquilino.IdInquilino);
 				connection.Open();
 				command.ExecuteNonQuery();
 				connection.Close();
