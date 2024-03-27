@@ -1,7 +1,7 @@
 using MySql.Data.MySqlClient;
 
-namespace Tp_Inmobiliaria_Ledesma_Lillo.Models
-{
+namespace Tp_Inmobiliaria_Ledesma_Lillo.Models;
+
     public class RepositorioInmueble
     {
         protected readonly string connectionString = "Server=localhost;Database=ledesmalillo;User=root;Password=;";
@@ -86,22 +86,24 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models
                 int id = 0;
             using(var connection = new MySqlConnection(connectionString))
             {
-                var sql = @$"INSERT INTO inmuebles ({nameof(Inmueble.Ambientes)}, {nameof(Inmueble.Direccion)}, 
-                           {nameof(Inmueble.Uso)}, {nameof(Inmueble.Latitud)},
-                           {nameof(Inmueble.Longitud)}, {nameof(Inmueble.Superficie)},{nameof(Inmueble.PropietarioId)})
-                    VALUES (@{nameof(Inmueble.PropietarioId)}, @{nameof(Inmueble.Ambientes)}, 
-                            @{nameof(Inmueble.Direccion)}, @{nameof(Inmueble.Uso)}, @{nameof(Inmueble.Latitud)},
-                            @{nameof(Inmueble.Longitud)}, @{nameof(Inmueble.Superficie)});
+                var sql = @$"INSERT INTO inmuebles ({nameof(Inmueble.Direccion)}, {nameof(Inmueble.Ambientes)},
+                    {nameof(Inmueble.Superficie)}, {nameof(Inmueble.Latitud)},
+                    {nameof(Inmueble.Uso)}, {nameof(Inmueble.Longitud)},
+                    {nameof(Inmueble.PropietarioId)})
+                    VALUES (@{nameof(Inmueble.Direccion)}, @{nameof(Inmueble.Ambientes)}, 
+                    @{nameof(Inmueble.Superficie)}, @{nameof(Inmueble.Latitud)}, @{nameof(Inmueble.Uso)}, 
+                    @{nameof(Inmueble.Longitud)},  @{nameof(Inmueble.PropietarioId)});
                     SELECT LAST_INSERT_ID();";
                 using(var command = new MySqlCommand(sql, connection))
-                {
-                    command.Parameters.AddWithValue($"@{nameof(Inmueble.PropietarioId)}", inmueble.PropietarioId);
+                {   
+                    
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.Ambientes)}", inmueble.Ambientes);
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.Direccion)}", inmueble.Direccion);
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.Uso)}", inmueble.Uso);
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.Latitud)}", inmueble.Latitud);
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.Longitud)}", inmueble.Longitud);
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.Superficie)}", inmueble.Superficie);
+                    command.Parameters.AddWithValue($"@{nameof(Inmueble.PropietarioId)}", inmueble.PropietarioId);
                 //    command.Parameters.AddWithValue($"@{nameof(Inmueble.IdInmueble)}", inmueble.IdInmueble);
                     connection.Open();
                     id = Convert.ToInt32(command.ExecuteScalar());
@@ -161,5 +163,4 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models
             }
             return 0;
         }
-}
-}
+    }
