@@ -58,7 +58,9 @@ public class InmuebleController : Controller
 		{
 			try
 			{
-				return View();
+				RepositorioPropietario repoPropietario = new RepositorioPropietario();
+                ViewBag.Propietarios = repoPropietario.ObtenerPropietarios();
+                return View();
 			}
 			catch (Exception ex)
 			{

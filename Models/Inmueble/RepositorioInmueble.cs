@@ -18,7 +18,7 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models;
             {
                 var sql = @$"Select {nameof(Inmueble.IdInmueble)}, {nameof(Inmueble.PropietarioId)}, {nameof(Propietario.Nombre)}, {nameof(Propietario.Apellido)},
                            {nameof(Inmueble.Ambientes)}, {nameof(Inmueble.Direccion)}, {nameof(Inmueble.Uso)}, {nameof(Inmueble.Latitud)},
-                           {nameof(Inmueble.Longitud)}, {nameof(Inmueble.Superficie)} 
+                           {nameof(Inmueble.Longitud)}, {nameof(Inmueble.Superficie)}, {nameof(Propietario.Nombre)}, {nameof(Propietario.Apellido)} 
                            from inmuebles i INNER JOIN propietarios p ON i.PropietarioId = p.IdPropietario";
                 using (var command = new MySqlCommand(sql, connection))
                 {
@@ -36,6 +36,12 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models;
                             Latitud = reader.GetDecimal(nameof(Inmueble.Latitud)),
                             Longitud = reader.GetDecimal(nameof(Inmueble.Longitud)),
                             Superficie = reader.GetInt32(nameof(Inmueble.Superficie)),
+                            Duenio = new Propietario
+                            {
+                                IdPropietario = reader.GetInt32(nameof(Inmueble.PropietarioId)),
+                                Nombre = reader.GetString(nameof(Propietario.Nombre)),
+                                Apellido = reader.GetString(nameof(Propietario.Apellido)),
+                            }
                         });
                     }
                     connection.Close();
@@ -50,10 +56,10 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models;
                 
                 using(var connection = new MySqlConnection(connectionString))
             {
-                var sql = @$"Select {nameof(Inmueble.IdInmueble)}, {nameof(Propietario.Nombre)}, {nameof(Propietario.Apellido)},
+                var sql = @$"SELECT {nameof(Inmueble.IdInmueble)}, {nameof(Propietario.Nombre)}, {nameof(Propietario.Apellido)},
                            {nameof(Inmueble.Ambientes)}, {nameof(Inmueble.Direccion)}, {nameof(Inmueble.Uso)}, {nameof(Inmueble.Latitud)},
                            {nameof(Inmueble.Longitud)}, {nameof(Inmueble.Superficie)} 
-                           from inmuebles i INNER JOIN propietarios p ON i.PropietarioId = p.IdPropietario
+                           FROM inmuebles i INNER JOIN propietarios p ON i.PropietarioId = p.IdPropietario
                             WHERE {nameof(Inmueble.IdInmueble)} = @{nameof(Inmueble.IdInmueble)}";
                 using (var command = new MySqlCommand(sql, connection))
                 {
@@ -72,6 +78,12 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models;
                             Latitud = reader.GetDecimal(nameof(Inmueble.Latitud)),
                             Longitud = reader.GetDecimal(nameof(Inmueble.Longitud)),
                             Superficie = reader.GetInt32(nameof(Inmueble.Superficie)),
+                            Duenio = new Propietario
+                            {
+                                IdPropietario = reader.GetInt32(nameof(Inmueble.PropietarioId)),
+                                Nombre = reader.GetString(nameof(Propietario.Nombre)),
+                                Apellido = reader.GetString(nameof(Propietario.Apellido)),
+                            }
                         };
                     }
                     connection.Close();
@@ -125,7 +137,6 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models;
                     {nameof(Inmueble.Uso)} = @{nameof(Inmueble.Uso)},
                     {nameof(Inmueble.Latitud)} = @{nameof(Inmueble.Latitud)},
                     {nameof(Inmueble.Longitud)} = @{nameof(Inmueble.Longitud)},
-                    {nameof(Inmueble.Latitud)} = @{nameof(Inmueble.Latitud)},
                     {nameof(Inmueble.Superficie)} = @{nameof(Inmueble.Superficie)}
                     WHERE {nameof(Inmueble.IdInmueble)} = @{nameof(Inmueble.IdInmueble)}";
                 using(var command = new MySqlCommand(sql, connection))
