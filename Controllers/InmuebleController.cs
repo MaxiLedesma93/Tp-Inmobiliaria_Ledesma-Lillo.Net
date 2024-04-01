@@ -39,7 +39,8 @@ public class InmuebleController : Controller
         try
         {
             if(id > 0)
-            {
+            {   RepositorioPropietario repoPropietario = new RepositorioPropietario();
+                ViewBag.Propietarios = repoPropietario.ObtenerPropietarios();
                 RepositorioInmueble rinmu = new RepositorioInmueble();
                 var inmueble = rinmu.ObtenerInmueble(id);
                 TempData["Mensaje"] = "Datos guardados correctamente";
@@ -71,12 +72,14 @@ public class InmuebleController : Controller
     public IActionResult Guardar(Inmueble inmueble)
     {
         RepositorioInmueble rinmu = new RepositorioInmueble();
+        
         try
-        {
+        {   
+            
            if(ModelState.IsValid)
            {
                 if(inmueble.IdInmueble > 0)
-                {
+                {   
                     rinmu.ModificaInmueble(inmueble);
                 }
                 else{
