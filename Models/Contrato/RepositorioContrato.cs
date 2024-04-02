@@ -21,14 +21,14 @@ public class RepositorioContrato
                      {nameof(Contrato.FecInicio)},
                      {nameof(Contrato.FecFin)},
                      {nameof(Contrato.Monto)},
-                     {nameof(Contrato.Estado)}
+                     {nameof(Contrato.Estado)})
                        
 					VALUES (@{nameof(Contrato.InmuebleId)},
                     @{nameof(Contrato.InquilinoId)},
                     @{nameof(Contrato.FecInicio)},
                     @{nameof(Contrato.FecFin)},
                     @{nameof(Contrato.Monto)},
-                    @{nameof(Contrato.Estado)}) 
+                    @{nameof(Contrato.Estado)});
 					SELECT LAST_INSERT_ID();";
             using (var command = new MySqlCommand(sql, connection))
             {
@@ -66,6 +66,7 @@ public class RepositorioContrato
             {
 
                 command.Parameters.AddWithValue($@"{nameof(Contrato.IdContrato)}", c.IdContrato);
+                command.Parameters.AddWithValue($@"{nameof(Contrato.InmuebleId)}", c.InmuebleId);
                 command.Parameters.AddWithValue($@"{nameof(Contrato.InquilinoId)}", c.InquilinoId);
                 command.Parameters.AddWithValue($@"{nameof(Contrato.FecInicio)}", c.FecInicio);
                 command.Parameters.AddWithValue($@"{nameof(Contrato.FecFin)}", c.FecFin);
@@ -109,10 +110,11 @@ public class RepositorioContrato
             var sql = @$"SELECT 
             {nameof(Contrato.IdContrato)}, {nameof(Contrato.InmuebleId)},
             {nameof(Contrato.InquilinoId)}, {nameof(Contrato.FecInicio)},
-            {nameof(Contrato.FecFin)}, {nameof(Contrato.Monto)}, {nameof(Contrato.Estado)}
+            {nameof(Contrato.FecFin)}, {nameof(Contrato.Monto)}, {nameof(Contrato.Estado)},
+            {nameof(Inquilino.Nombre)}, {nameof(Inquilino.Apellido)}, {nameof(Inmueble.Direccion)}
             
-            FROM contratos c INNER JOIN inquilinos inq ON c.InquilinoId = inq.IdInquilino
-            INNER JOIN inmuebles i ON c.InmuebleId = i.IdInmueble
+            FROM contratos c INNER JOIN inquilinos i ON c.InquilinoId = i.IdInquilino
+            INNER JOIN inmuebles inm ON c.InmuebleId = inm.IdInmueble
             WHERE {nameof(Contrato.IdContrato)} = @{nameof(Contrato.IdContrato)}";
             using (var command = new MySqlCommand(sql, connection))
             {
@@ -141,8 +143,6 @@ public class RepositorioContrato
                             {
                                 IdInmueble = reader.GetInt32(nameof(Contrato.InmuebleId)),
                                 Direccion = reader.GetString(nameof(Inmueble.Direccion)),
-                                Ambientes = reader.GetInt32(nameof(Inmueble.Ambientes)),
-                                Uso = reader.GetString(nameof(Inmueble.Uso))
                             }
 
                         };
@@ -169,7 +169,9 @@ public class RepositorioContrato
             {nameof(Contrato.FecInicio)}, {nameof(Contrato.FecFin)},
             {nameof(Contrato.Monto)}, {nameof(Contrato.Estado)}, {nameof(Inquilino.Nombre)},
             {nameof(Inquilino.Apellido)}, {nameof(Inmueble.Direccion)} 
-            FROM contratos c (INNER JOIN inquilinos i ON c.InquilinoId = i.IdInquilino) (INNER JOIN inmuebles in ON c.InmuebleId = in.IdInmueble)";
+            FROM contratos c INNER JOIN inquilinos i ON c.InquilinoId = i.IdInquilino
+            INNER JOIN inmuebles inm ON c.InmuebleId = inm.IdInmueble";
+           
 
             using(var command = new MySqlCommand(sql, connection)){
                 connection.Open();
@@ -192,7 +194,6 @@ public class RepositorioContrato
                                 IdInmueble = reader.GetInt32(nameof(Contrato.InmuebleId)),
                                 Direccion = reader.GetString(nameof(Inmueble.Direccion))
                             }
-                           
                         });
                     }
                 connection.Close();

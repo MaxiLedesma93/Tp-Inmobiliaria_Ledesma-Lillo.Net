@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Tp-Inmobiliaria_Ledesma-Lillo.Net")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+019fcd3caed2525a07748ee25486b684c1e05b5a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b7e6e5f51bb0c12e289c84096a8935b67f2f3068")]
 [assembly: System.Reflection.AssemblyProductAttribute("Tp-Inmobiliaria_Ledesma-Lillo.Net")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Tp-Inmobiliaria_Ledesma-Lillo.Net")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

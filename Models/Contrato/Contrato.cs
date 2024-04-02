@@ -12,7 +12,7 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models
 
         public Inmueble? Inmueble { get; set; }
 
-        [Required, Display (Name ="Inmueble")]
+        [Required, Display (Name ="Direccion")]
         public int InmuebleId { get; set; }
 
         public Inquilino? Inquilino { get; set; }
