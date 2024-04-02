@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+
 namespace Tp_Inmobiliaria_Ledesma_Lillo.Models
 {
     public class Contrato

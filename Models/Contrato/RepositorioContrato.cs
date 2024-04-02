@@ -1,5 +1,5 @@
-using System.Reflection.Metadata.Ecma335;
 using MySql.Data.MySqlClient;
+
 
 namespace Tp_Inmobiliaria_Ledesma_Lillo.Models;
 
@@ -172,7 +172,7 @@ public class RepositorioContrato
 
             using(var command = new MySqlCommand(sql, connection)){
                 connection.Open();
-                using(var reader = command.ExecuteReader()){
+                using(var reader = command.ExecuteReader())
                     while(reader.Read()){
                         contratos.Add(new Contrato{
                             IdContrato = reader.GetInt32(nameof(Contrato.IdContrato)),
@@ -193,7 +193,6 @@ public class RepositorioContrato
                             }
                         });
                     }
-                }
                 connection.Close();
             }
         }

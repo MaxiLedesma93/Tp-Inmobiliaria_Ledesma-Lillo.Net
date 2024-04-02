@@ -18,6 +18,22 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\maxim\OneDrive\Documents\GitHub\Tp-Inmobiliaria.Net
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/maxim/OneDrive/Documents/GitHub/Tp-Inmobiliaria.Net/Views/Contrato/Crear.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udHJhdG9cQ3JlYXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/maxim/OneDrive/Documents/GitHub/Tp-Inmobiliaria.Net/Views/Contrato/Editar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udHJhdG9cRWRpdGFyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/maxim/OneDrive/Documents/GitHub/Tp-Inmobiliaria.Net/Views/Contrato/Guardar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udHJhdG9cR3VhcmRhci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/maxim/OneDrive/Documents/GitHub/Tp-Inmobiliaria.Net/Views/Contrato/Listado.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udHJhdG9cTGlzdGFkby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/maxim/OneDrive/Documents/GitHub/Tp-Inmobiliaria.Net/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
