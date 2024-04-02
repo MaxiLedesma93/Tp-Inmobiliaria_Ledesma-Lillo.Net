@@ -12,7 +12,7 @@ public class RepositorioContrato
 
     }
     public int AltaContrato(Contrato c)
-    {
+    {  
         int id = -1;
         using (var connection = new MySqlConnection(connectionString))
         {
@@ -164,11 +164,12 @@ public class RepositorioContrato
 
         using (var connection = new MySqlConnection(connectionString)){
 
-            var sql = @$" SELECT {nameof(Inmueble.Direccion)}, {nameof(Inquilino.Nombre)},
-            {nameof(Inquilino.Apellido)}, {nameof(Contrato.FecInicio)}, {nameof(Contrato.FecFin)},
-            {nameof(Contrato.Monto)}, {nameof(Contrato.Estado)}, {nameof(Contrato.IdContrato)}
-            FROM contratos c INNER JOIN inquilinos inq ON c.InquilinoId = inq.IdInquilino
-            INNER JOIN inmuebles i ON c.InmuebleId = i.IdInmueble";
+            var sql = @$" SELECT {nameof(Contrato.IdContrato)},
+            {nameof(Contrato.InquilinoId)},{nameof(Contrato.InmuebleId)}, 
+            {nameof(Contrato.FecInicio)}, {nameof(Contrato.FecFin)},
+            {nameof(Contrato.Monto)}, {nameof(Contrato.Estado)}, {nameof(Inquilino.Nombre)},
+            {nameof(Inquilino.Apellido)}, {nameof(Inmueble.Direccion)} 
+            FROM contratos c (INNER JOIN inquilinos i ON c.InquilinoId = i.IdInquilino) (INNER JOIN inmuebles in ON c.InmuebleId = in.IdInmueble)";
 
             using(var command = new MySqlCommand(sql, connection)){
                 connection.Open();
@@ -191,6 +192,7 @@ public class RepositorioContrato
                                 IdInmueble = reader.GetInt32(nameof(Contrato.InmuebleId)),
                                 Direccion = reader.GetString(nameof(Inmueble.Direccion))
                             }
+                           
                         });
                     }
                 connection.Close();
