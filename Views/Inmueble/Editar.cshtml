@@ -49,8 +49,12 @@
 				<label class="control-label">Propietario</label>
 				<select class="form-control" name="PropietarioId">
 					@foreach (var item in listaPropietarios)
-					{
-						<option value="@item.IdPropietario">@(item.ToString())</option>
+					{    @if(item.IdPropietario== @Model.PropietarioId){
+                            <option selected value="@item.IdPropietario">@(item.ToString())</option>
+
+                        }else{
+						    <option value="@item.IdPropietario">@(item.ToString())</option>
+                            }
 					}
 				</select>
 				<span asp-validation-for="PropietarioId" class="text-danger"></span>

@@ -27,4 +27,5 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models
 		
 		public Propietario? Duenio { get; set; }
    }
+   
 }
