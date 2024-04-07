@@ -18,6 +18,9 @@ public class InmuebleController : Controller
     {
         try
         {
+            RepositorioTipo rp = new RepositorioTipo();
+            ViewBag.Tipos = rp.ObtenerTiposInmuebles();
+            
             RepositorioInmueble rinmu = new RepositorioInmueble();
             var lista = rinmu.ObtenerInmuebles();
             ViewBag.id = TempData["id"];
@@ -41,6 +44,8 @@ public class InmuebleController : Controller
             if(id > 0)
             {   RepositorioPropietario repoPropietario = new RepositorioPropietario();
                 ViewBag.Propietarios = repoPropietario.ObtenerPropietarios();
+                RepositorioTipo rt = new RepositorioTipo();
+                ViewBag.Tipos = rt.ObtenerTiposInmuebles();
                 RepositorioInmueble rinmu = new RepositorioInmueble();
                 var inmueble = rinmu.ObtenerInmueble(id);
                 TempData["Mensaje"] = "Datos guardados correctamente";
@@ -59,7 +64,9 @@ public class InmuebleController : Controller
 		{
 			try
 			{
-				RepositorioPropietario repoPropietario = new RepositorioPropietario();
+				RepositorioTipo rt = new RepositorioTipo();
+                ViewBag.Tipos = rt.ObtenerTiposInmuebles();
+                RepositorioPropietario repoPropietario = new RepositorioPropietario();
                 ViewBag.Propietarios = repoPropietario.ObtenerPropietarios();
                 return View();
 			}

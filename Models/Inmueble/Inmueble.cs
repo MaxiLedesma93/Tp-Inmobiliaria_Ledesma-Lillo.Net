@@ -23,9 +23,12 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models
 		
 		//clave [ForeignKey(nameof(PropietarioId)), Required]
 		public int PropietarioId { get; set; }
-		
-		
 		public Propietario? Duenio { get; set; }
+
+		[Display(Name = "Tipo Inmueble")]
+		public int TipoId {get; set;}
+
+		public Tipo? TipoInmueble {get; set;}
    }
    
 }

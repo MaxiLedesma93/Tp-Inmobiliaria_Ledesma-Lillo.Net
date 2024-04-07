@@ -57,7 +57,7 @@ public class RepositorioPropietario
             {
 				command.Parameters.AddWithValue($"@{nameof(Propietario.IdPropietario)}", id);
                 connection.Open();
-                var reader = command.ExecuteReader();
+                using (var reader = command.ExecuteReader())
 
                 if(reader.Read())
                 {
@@ -108,6 +108,7 @@ public class RepositorioPropietario
 
 		public int ModificaPropietario(Propietario propietario)
 	{
+		int res = -1;
 		using(var connection = new MySqlConnection(connectionString))
 		{
 			var sql = @$"UPDATE propietarios
@@ -126,13 +127,14 @@ public class RepositorioPropietario
 				command.Parameters.AddWithValue($"@{nameof(Propietario.Telefono)}", propietario.Telefono);
 				command.Parameters.AddWithValue($"@{nameof(Propietario.Email)}", propietario.Email);
 				command.Parameters.AddWithValue($"@{nameof(Propietario.Clave)}", propietario.Clave);
+				command.Parameters.AddWithValue($"@{nameof(Propietario.IdPropietario)}", propietario.IdPropietario);
 				
 				connection.Open();
 				command.ExecuteNonQuery();
 				connection.Close();
 			}
 		}
-		return 0;
+		return res;
 	}
 
 

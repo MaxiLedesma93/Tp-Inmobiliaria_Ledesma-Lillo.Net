@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Editar Inmueble";
     var listaPropietarios = (IList<Tp_Inmobiliaria_Ledesma_Lillo.Models.Propietario>)ViewBag.Propietarios;
+    var listaTipos = (IList<Tp_Inmobiliaria_Ledesma_Lillo.Models.Tipo>)ViewBag.Tipos;
 }
 
 
@@ -45,6 +46,20 @@
                 <input asp-for="Uso" class="form-control" />
                 <span asp-validation-for="Uso" class="text-danger"></span>
             </div>
+            <div class="form-group">
+				<label class="control-label">Tipo Inmueble</label>
+				<select class="form-control" name="TipoId">
+					@foreach (var item in listaTipos)
+					{    @if(item.IdTipo == @Model.TipoId){
+                            <option selected value="@item.IdTipo">@(item.ToString())</option>
+
+                        }else{
+						    <option value="@item.IdTipo">@(item.ToString())</option>
+                            }
+					}
+				</select>
+				<span asp-validation-for="TipoId" class="text-danger"></span>
+			</div>
             <div class="form-group">
 				<label class="control-label">Propietario</label>
 				<select class="form-control" name="PropietarioId">
