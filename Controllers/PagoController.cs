@@ -81,6 +81,25 @@ public class PagoController : Controller
         {
             return Json(new { Error = ex.Message });
         }
+    }
 
+    public IActionResult Editar(int id)
+    {
+        try
+        {
+            if(id > 0)
+            {
+                RepositorioPago rp = new RepositorioPago();
+                var pago = rp.ObtenerPago(id);
+                TempData["Mensaje"] = "Datos guardados correctamente";
+                return View(pago);
+            }
+            else
+                { return View();}
+        }
+        catch(Exception ex)
+        {
+            return Json(new { Error = ex.Message });
+        }
     }
 }

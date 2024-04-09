@@ -21,6 +21,6 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models
         public int ContratoId { get; set; }
 
         [DisplayName("Datos del Contrato")]
-        public Contrato contrato { get; set; }
+        public Contrato? contrato { get; set; }
     }
 }
