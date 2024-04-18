@@ -76,11 +76,11 @@ public class PropietarioController : Controller
            {
                 if(propietario.IdPropietario > 0)
                 {
-                rp.ModificaPropietario(propietario);
+                    rp.ModificaPropietario(propietario);
                 }
                 else{
-                rp.AltaPropietario(propietario);
-                TempData["id"] = propietario.IdPropietario; 
+                    rp.AltaPropietario(propietario);
+                    TempData["id"] = propietario.IdPropietario; 
                 }
            }
            else 

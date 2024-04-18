@@ -33,18 +33,26 @@ public class PagoController : Controller
             return Json(new { Error = ex.Message });
         }
     }
-
-    public IActionResult Crear() //carga el formulario vacio
-		{
-			try
+    [HttpGet]
+    public IActionResult Crear(int id)
+	{
+			RepositorioPago rp = new RepositorioPago();
+            RepositorioContrato rc = new RepositorioContrato();
+            try
 			{
-				return View();
+                Contrato c = rc.ObtenerContrato(id);
+                IList<Pago> lista = rp.ObtenerPagosPorContrato(id);
+                ViewBag.tamanio = lista.Count + 1;
+                ViewBag.monto = c.Monto;
+                ViewBag.idContrato = c.IdContrato;
+                ViewBag.ApellidoInq = c.Inquilino.Apellido;
+                return View();
 			}
 			catch (Exception ex)
 			{
                 return Json(new { Error = ex.Message });
 			}
-		}
+	}
 
     public IActionResult Eliminar(int id)
     {
@@ -61,6 +69,7 @@ public class PagoController : Controller
         }
     }
 
+    [HttpPost]
     public IActionResult Guardar(Pago pago)
     {
         RepositorioPago rp = new RepositorioPago();
@@ -68,8 +77,15 @@ public class PagoController : Controller
         {
            if(ModelState.IsValid)
            {
-                rp.AltaPago(pago);
+                if(pago.IdPago > 0)
+                {
+                    rp.ModificaPago(pago);
+                }
+                else
+                {
+                    rp.AltaPago(pago);
                 TempData["id"] = pago.IdPago;
+                }
            }
            else 
            {

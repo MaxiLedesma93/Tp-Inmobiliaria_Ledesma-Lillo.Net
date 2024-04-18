@@ -18,7 +18,7 @@ public class RepositorioPago
 			using(var connection = new MySqlConnection(connectionString))
             {
                 var sql = @$"Select {nameof(Pago.IdPago)}, {nameof(Pago.NumPago)}, {nameof(Pago.FechaPago)}, {nameof(Pago.Importe)},
-                                {nameof(Pago.ContratoId)}, {nameof(Contrato.InquilinoId)}, {nameof(Inquilino.Apellido)}
+                                {nameof(Pago.ContratoId)}, {nameof(Pago.Detalle)}, {nameof(Contrato.InquilinoId)}, {nameof(Inquilino.Apellido)}
                             from pagos p INNER JOIN contratos c ON p.ContratoId = c.IdContrato
                             INNER JOIN inquilinos inq ON c.InquilinoId = inq.IdInquilino";
                 using (var command = new MySqlCommand(sql, connection))
@@ -33,6 +33,7 @@ public class RepositorioPago
                             NumPago = reader.GetInt32(nameof(Pago.NumPago)),
                             FechaPago = reader.GetDateTime(nameof(Pago.FechaPago)),
                             Importe = reader.GetDecimal(nameof(Pago.Importe)),
+                            Detalle = reader.GetString(nameof(Pago.Detalle)),
                             ContratoId = reader.GetInt32(nameof(Pago.ContratoId)),
                             contrato = new Contrato
                             {
@@ -54,12 +55,12 @@ public class RepositorioPago
 
     public Pago ObtenerPago(int id)
     {
-			Pago? pago = null;
+        Pago? pago = null;
 
-			using(var connection = new MySqlConnection(connectionString))
+        using(var connection = new MySqlConnection(connectionString))
             {
-                var sql = @$"Select {nameof(Pago.NumPago)}, {nameof(Pago.FechaPago)}, {nameof(Pago.Importe)},
-                                {nameof(Pago.ContratoId)},  
+                var sql = @$"Select {nameof(Pago.IdPago)}, {nameof(Pago.NumPago)}, {nameof(Pago.FechaPago)}, {nameof(Pago.Importe)},
+                                {nameof(Pago.ContratoId)}, {nameof(Pago.Detalle)}
                             from pagos
                             WHERE {nameof(Pago.IdPago)} = @{nameof(Pago.IdPago)}";
                 using (var command = new MySqlCommand(sql, connection))
@@ -75,12 +76,57 @@ public class RepositorioPago
                             NumPago = reader.GetInt32(nameof(Pago.NumPago)),
                             FechaPago = reader.GetDateTime(nameof(Pago.FechaPago)),
                             Importe = reader.GetDecimal(nameof(Pago.Importe)),
+                            Detalle = reader.GetString(nameof(Pago.Detalle)),
                             ContratoId = reader.GetInt32(nameof(Pago.ContratoId)),
-                        };
+                    };
                     }
                     connection.Close();
                 }
                 return pago;
+            }
+    }
+    public IList<Pago> ObtenerPagosPorContrato(int id)
+    {
+			IList<Pago> pagos = new List<Pago>();
+
+			using(var connection = new MySqlConnection(connectionString))
+            {
+                var sql = @$"Select {nameof(Pago.IdPago)}, {nameof(Pago.NumPago)}, {nameof(Pago.FechaPago)}, {nameof(Pago.Importe)},
+                                {nameof(Pago.ContratoId)}, {nameof(Pago.Detalle)}, {nameof(Contrato.InquilinoId)}, {nameof(Inquilino.Apellido)}
+                            from pagos p INNER JOIN contratos c ON p.ContratoId = c.IdContrato
+                            INNER JOIN inquilinos inq ON c.InquilinoId = inq.IdInquilino";
+
+                using (var command = new MySqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue($"@{nameof(Pago.ContratoId)}", id);
+                    connection.Open();
+                    using(var reader = command.ExecuteReader())
+
+                    while(reader.Read())
+                    {
+                        pagos.Add(new Pago{
+                            IdPago = reader.GetInt32(nameof(Pago.IdPago)),
+                            NumPago = reader.GetInt32(nameof(Pago.NumPago)),
+                            FechaPago = reader.GetDateTime(nameof(Pago.FechaPago)),
+                            Importe = reader.GetDecimal(nameof(Pago.Importe)),
+                            Detalle = reader.GetString(nameof(Pago.Detalle)),
+                            ContratoId = reader.GetInt32(nameof(Pago.ContratoId)),
+                            contrato = new Contrato
+                            {
+                                IdContrato = reader.GetInt32(nameof(Pago.ContratoId)),
+                                InquilinoId = reader.GetInt32(nameof(Contrato.InquilinoId)),
+                                Inquilino = new Inquilino
+                                {
+                                    IdInquilino = reader.GetInt32(nameof(Contrato.InquilinoId)),
+                                    Apellido = reader.GetString(nameof(Inquilino.Apellido)),
+                                }
+
+                            }
+                    });
+                    }
+                    connection.Close();
+                }
+                return pagos;
             }
 	}
 
@@ -90,10 +136,11 @@ public class RepositorioPago
 		using(var connection = new MySqlConnection(connectionString))
 		{
 			var sql = @$"INSERT INTO pagos ({nameof(Pago.NumPago)}, {nameof(Pago.Importe)}, {nameof(Pago.FechaPago)},
-                        {nameof(Pago.ContratoId)})
+                        {nameof(Pago.Detalle)}, {nameof(Pago.ContratoId)})
 				VALUES (@{nameof(Pago.NumPago)},
                         @{nameof(Pago.Importe)},
                         @{nameof(Pago.FechaPago)},
+                        @{nameof(Pago.Detalle)},
                         @{nameof(Pago.ContratoId)});
 				SELECT LAST_INSERT_ID();";
 			using(var command = new MySqlCommand(sql, connection))
@@ -101,6 +148,7 @@ public class RepositorioPago
 				command.Parameters.AddWithValue($"@{nameof(Pago.NumPago)}", pago.NumPago);
                 command.Parameters.AddWithValue($"@{nameof(Pago.Importe)}", pago.Importe);
                 command.Parameters.AddWithValue($"@{nameof(Pago.FechaPago)}", pago.FechaPago);
+                command.Parameters.AddWithValue($"@{nameof(Pago.Detalle)}", pago.Detalle);
                 command.Parameters.AddWithValue($"@{nameof(Pago.ContratoId)}", pago.ContratoId);
 
 				connection.Open();
@@ -114,13 +162,15 @@ public class RepositorioPago
 
     public int ModificaPago(Pago pago)
 	{
+        int res = -1;
 		using(var connection = new MySqlConnection(connectionString))
 		{
 			var sql = @$"UPDATE pagos
 				SET {nameof(Pago.NumPago)} = @{nameof(Pago.NumPago)},
 				{nameof(Pago.FechaPago)} = @{nameof(Pago.FechaPago)},
                 {nameof(Pago.Importe)} = @{nameof(Pago.Importe)},
-                {nameof(Pago.ContratoId)} = @{nameof(Pago.ContratoId)},
+                {nameof(Pago.Detalle)} = @{nameof(Pago.Detalle)},
+                {nameof(Pago.ContratoId)} = @{nameof(Pago.ContratoId)}
 
 				WHERE {nameof(Pago.IdPago)} = @{nameof(Pago.IdPago)}";
 			using(var command = new MySqlCommand(sql, connection))
@@ -128,6 +178,7 @@ public class RepositorioPago
 				command.Parameters.AddWithValue($"@{nameof(Pago.NumPago)}", pago.NumPago);
 				command.Parameters.AddWithValue($"@{nameof(Pago.FechaPago)}", pago.FechaPago);
 				command.Parameters.AddWithValue($"@{nameof(Pago.Importe)}", pago.Importe);
+                command.Parameters.AddWithValue($"@{nameof(Pago.Detalle)}", pago.Detalle);
 				command.Parameters.AddWithValue($"@{nameof(Pago.ContratoId)}", pago.ContratoId);
 				command.Parameters.AddWithValue($"@{nameof(Pago.IdPago)}", pago.IdPago);
 				connection.Open();
@@ -135,7 +186,7 @@ public class RepositorioPago
 				connection.Close();
 			}
 		}
-		return 0;
+		return res;
 	}
 
      public int EliminaPago(int id)
