@@ -110,4 +110,11 @@ public class PropietarioController : Controller
             return Json(new { Error = ex.Message });
         }
     }
+
+    public IActionResult Detalle(int id)
+    {
+        RepositorioPropietario rp = new RepositorioPropietario();
+        Propietario? p = rp.ObtenerPropietario(id);
+        return View(p);
+    }
 }

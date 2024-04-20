@@ -122,4 +122,19 @@ public class InmuebleController : Controller
             return Json(new { Error = ex.Message });
         }
     }
+
+    public IActionResult Detalle(int id)
+    {
+        RepositorioInmueble rinmu = new RepositorioInmueble();
+        RepositorioPropietario rp = new RepositorioPropietario();
+        RepositorioTipo rt = new RepositorioTipo();
+
+        Inmueble? inmu = rinmu.ObtenerInmueble(id);
+        //Propietario? prop = rp.ObtenerPropietario(inmu.PropietarioId);
+        ViewBag.Propietario = inmu.Duenio.Nombre + " " + inmu.Duenio.Apellido;
+        //Tipo? tipo = rt.ObtenerTipo(inmu.TipoId);
+        ViewBag.Tipo = inmu.TipoInmueble.Descripcion;
+
+        return View(inmu);
+    }
 }

@@ -5,7 +5,7 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models;
 public class Propietario
 	{
 		[Key]
-		[Display(Name = "Código Int.")]
+		[Display(Name = "Código Interno")]
 		public int IdPropietario { get; set; }
 		[Required]
 		public string? Nombre { get; set; }

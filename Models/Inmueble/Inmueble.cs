@@ -6,7 +6,7 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models
     public class Inmueble 
    {
 		[Key]
-        [Display(Name = "Nº")]
+        [Display(Name = "Código Interno")]
 		public int IdInmueble { get; set; }
 		[Required]
 		[Display(Name = "Dirección")]
@@ -19,9 +19,8 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models
 
         public string? Uso {get; set; }
 		public decimal Longitud { get; set; }
-		[Display(Name = "Dueño"), Required]
 		
-		//clave [ForeignKey(nameof(PropietarioId)), Required]
+		[Display(Name = "Dueño"), Required]
 		public int PropietarioId { get; set; }
 		public Propietario? Duenio { get; set; }
 

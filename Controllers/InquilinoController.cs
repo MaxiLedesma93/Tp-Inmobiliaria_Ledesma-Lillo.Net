@@ -104,4 +104,11 @@ public class InquilinoController : Controller
             return Json(new { Error = ex.Message });
         }
     }
+
+    public IActionResult Detalle(int id)
+    {
+        RepositorioInquilino rinq = new RepositorioInquilino();
+        Inquilino? inq = rinq.ObtenerInquilino(id);
+        return View(inq);
+    }
 }

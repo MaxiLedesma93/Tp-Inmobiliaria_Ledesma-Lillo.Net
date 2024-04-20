@@ -84,7 +84,7 @@ public class PagoController : Controller
                 else
                 {
                     rp.AltaPago(pago);
-                TempData["id"] = pago.IdPago;
+                    TempData["id"] = pago.IdPago;
                 }
            }
            else 
