@@ -83,10 +83,18 @@ public class RepositorioInquilino
 			int id = 0;
 		using(var connection = new MySqlConnection(connectionString))
 		{
-			var sql = @$"INSERT INTO inquilinos ({nameof(Inquilino.Nombre)}, {nameof(Inquilino.Apellido)}, {nameof(Inquilino.Dni)},
-				{nameof(Inquilino.Telefono)}, {nameof(Inquilino.Email)})
-				VALUES (@{nameof(Inquilino.Nombre)}, @{nameof(Inquilino.Apellido)}, @{nameof(Inquilino.Dni)},
-				@{nameof(Inquilino.Telefono)}, @{nameof(Inquilino.Email)});
+			var sql = @$"INSERT INTO inquilinos ({nameof(Inquilino.Nombre)}, 
+			    {nameof(Inquilino.Apellido)}, 
+				{nameof(Inquilino.Dni)},
+				{nameof(Inquilino.Telefono)}, 
+				{nameof(Inquilino.Email)})
+
+				VALUES (@{nameof(Inquilino.Nombre)}, 
+				@{nameof(Inquilino.Apellido)}, 
+				@{nameof(Inquilino.Dni)},
+				@{nameof(Inquilino.Telefono)}, 
+				@{nameof(Inquilino.Email)});
+				
 				SELECT LAST_INSERT_ID();";
 			using(var command = new MySqlCommand(sql, connection))
 			{
@@ -95,7 +103,6 @@ public class RepositorioInquilino
 				command.Parameters.AddWithValue($"@{nameof(Inquilino.Dni)}", inquilino.Dni);
 				command.Parameters.AddWithValue($"@{nameof(Inquilino.Telefono)}", inquilino.Telefono);
 				command.Parameters.AddWithValue($"@{nameof(Inquilino.Email)}", inquilino.Email);
-				//command.Parameters.AddWithValue($"@{nameof(Inquilino.Clave)}", inquilino.Clave);
 
 				connection.Open();
 				id = Convert.ToInt32(command.ExecuteScalar());

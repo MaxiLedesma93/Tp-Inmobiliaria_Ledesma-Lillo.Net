@@ -118,4 +118,13 @@ public class PagoController : Controller
             return Json(new { Error = ex.Message });
         }
     }
+
+    public IActionResult Detalle(int id)
+    {
+        RepositorioPago rp = new RepositorioPago();
+
+        Pago? pago = rp.ObtenerPago(id);
+
+        return View(pago);
+    }
 }

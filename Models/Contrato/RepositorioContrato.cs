@@ -16,7 +16,7 @@ public class RepositorioContrato
         int id = -1;
         using (var connection = new MySqlConnection(connectionString))
         {
-            var sql = @$"INSERT INTO Contratos ({nameof(Contrato.InmuebleId)},
+            var sql = @$"INSERT INTO contratos ({nameof(Contrato.InmuebleId)},
                      {nameof(Contrato.InquilinoId)},
                      {nameof(Contrato.FecInicio)},
                      {nameof(Contrato.FecFin)},
@@ -29,6 +29,7 @@ public class RepositorioContrato
                     @{nameof(Contrato.FecFin)},
                     @{nameof(Contrato.Monto)},
                     @{nameof(Contrato.Estado)});
+                   
 					SELECT LAST_INSERT_ID();";
             using (var command = new MySqlCommand(sql, connection))
             {
@@ -38,6 +39,7 @@ public class RepositorioContrato
                 command.Parameters.AddWithValue($"@{nameof(Contrato.FecFin)}", c.FecFin);
                 command.Parameters.AddWithValue($"@{nameof(Contrato.Monto)}", c.Monto);
                 command.Parameters.AddWithValue($"@{nameof(Contrato.Estado)}", c.Estado);
+                
                 connection.Open();
                 id = Convert.ToInt32(command.ExecuteScalar());
                 c.IdContrato = id;
@@ -60,6 +62,7 @@ public class RepositorioContrato
             {nameof(Contrato.FecFin)} = @{nameof(Contrato.FecFin)},
             {nameof(Contrato.Monto)} = @{nameof(Contrato.Monto)},
             {nameof(Contrato.Estado)} = @{nameof(Contrato.Estado)}
+            
             WHERE {nameof(Contrato.IdContrato)} = @{nameof(Contrato.IdContrato)}";
 
             using (var command = new MySqlCommand(sql, connection))
@@ -115,6 +118,7 @@ public class RepositorioContrato
             
             FROM contratos c INNER JOIN inquilinos i ON c.InquilinoId = i.IdInquilino
             INNER JOIN inmuebles inm ON c.InmuebleId = inm.IdInmueble
+            
             WHERE {nameof(Contrato.IdContrato)} = @{nameof(Contrato.IdContrato)}";
             using (var command = new MySqlCommand(sql, connection))
             {
@@ -144,16 +148,11 @@ public class RepositorioContrato
                                 IdInmueble = reader.GetInt32(nameof(Contrato.InmuebleId)),
                                 Direccion = reader.GetString(nameof(Inmueble.Direccion)),
                             }
-
                         };
-
                     }
-
                 }
                 connection.Close();
-
             }
-
         }
 
         return contrato;
@@ -165,14 +164,14 @@ public class RepositorioContrato
         using (var connection = new MySqlConnection(connectionString)){
 
             var sql = @$" SELECT {nameof(Contrato.IdContrato)},
-            {nameof(Contrato.InquilinoId)},{nameof(Contrato.InmuebleId)}, 
+            {nameof(Contrato.InquilinoId)},{nameof(Contrato.InmuebleId)},
             {nameof(Contrato.FecInicio)}, {nameof(Contrato.FecFin)},
             {nameof(Contrato.Monto)}, {nameof(Contrato.Estado)}, {nameof(Inquilino.Nombre)},
-            {nameof(Inquilino.Apellido)}, {nameof(Inmueble.Direccion)} 
+            {nameof(Inquilino.Apellido)}, {nameof(Inmueble.Direccion)}
+            
             FROM contratos c INNER JOIN inquilinos i ON c.InquilinoId = i.IdInquilino
             INNER JOIN inmuebles inm ON c.InmuebleId = inm.IdInmueble";
            
-
             using(var command = new MySqlCommand(sql, connection)){
                 connection.Open();
                 using(var reader = command.ExecuteReader())
@@ -192,7 +191,8 @@ public class RepositorioContrato
                             },
                             Inmueble = new Inmueble{
                                 IdInmueble = reader.GetInt32(nameof(Contrato.InmuebleId)),
-                                Direccion = reader.GetString(nameof(Inmueble.Direccion))
+                                Direccion = reader.GetString(nameof(Inmueble.Direccion)),
+                                PropietarioId = reader.GetInt32(nameof(Inmueble.PropietarioId)),
                             }
                         });
                     }

@@ -82,6 +82,14 @@ public class TipoController : Controller
         {
             return Json(new { Error = ex.Message });
         }
+    }
 
+    public IActionResult Detalle(int id)
+    {
+        RepositorioTipo rt = new RepositorioTipo();
+
+        Tipo? tipo = rt.ObtenerTipo(id);
+
+        return View(tipo);
     }
 }

@@ -22,7 +22,6 @@ public class Propietario
 
 		public override string ToString()
 		{
-			//return $"{Apellido}, {Nombre}";
 			return $"{Nombre} {Apellido}";
 		}
 	}

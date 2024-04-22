@@ -20,6 +20,11 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models
         [Required, Display(Name ="Inquilino")]
         public int InquilinoId { get; set; }
 
+        [Required, Display(Name ="Propietario")]
+        public int PropietarioId {get; set;}
+
+        public Propietario? Propietario {get; set;}
+
         [Required, Display(Name ="Fecha Inicio Contrato")]
         public DateTime FecInicio { get; set; }
 

@@ -116,12 +116,22 @@ public class RepositorioInmueble
         {
             var sql = @$"INSERT INTO inmuebles ({nameof(Inmueble.Direccion)}, 
                     {nameof(Inmueble.Ambientes)},
-                    {nameof(Inmueble.Superficie)}, {nameof(Inmueble.Latitud)},
-                    {nameof(Inmueble.Uso)}, {nameof(Inmueble.Longitud)},
-                    {nameof(Inmueble.PropietarioId)}, {nameof(Inmueble.TipoId)})
-                    VALUES (@{nameof(Inmueble.Direccion)}, @{nameof(Inmueble.Ambientes)}, 
-                    @{nameof(Inmueble.Superficie)}, @{nameof(Inmueble.Latitud)}, @{nameof(Inmueble.Uso)}, 
-                    @{nameof(Inmueble.Longitud)}, @{nameof(Inmueble.PropietarioId)}, @{nameof(Inmueble.TipoId)});
+                    {nameof(Inmueble.Superficie)}, 
+                    {nameof(Inmueble.Latitud)},
+                    {nameof(Inmueble.Uso)}, 
+                    {nameof(Inmueble.Longitud)},
+                    {nameof(Inmueble.PropietarioId)}, 
+                    {nameof(Inmueble.TipoId)})
+
+                    VALUES (@{nameof(Inmueble.Direccion)}, 
+                    @{nameof(Inmueble.Ambientes)}, 
+                    @{nameof(Inmueble.Superficie)}, 
+                    @{nameof(Inmueble.Latitud)}, 
+                    @{nameof(Inmueble.Uso)}, 
+                    @{nameof(Inmueble.Longitud)}, 
+                    @{nameof(Inmueble.PropietarioId)}, 
+                    @{nameof(Inmueble.TipoId)});
+                    
                     SELECT LAST_INSERT_ID();";
             using (var command = new MySqlCommand(sql, connection))
             {

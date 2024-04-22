@@ -40,10 +40,12 @@ public class ContratoController : Controller
         {
             if(id > 0)
             {   RepositorioInmueble repoInmueble = new RepositorioInmueble();
-                ViewBag.Inmuebles = repoInmueble.ObtenerInmuebles();
                 RepositorioInquilino repoInquilino = new RepositorioInquilino();
-                ViewBag.Inquilinos = repoInquilino.ObtenerInquilinos();
                 RepositorioContrato rc = new RepositorioContrato();
+
+                ViewBag.Inmuebles = repoInmueble.ObtenerInmuebles();               
+                ViewBag.Inquilinos = repoInquilino.ObtenerInquilinos();
+
                 var contrato = rc.ObtenerContrato(id);
                 TempData["Mensaje"] = "Datos guardados correctamente";
                 return View(contrato);
@@ -62,9 +64,11 @@ public class ContratoController : Controller
 			try
 			{
 				RepositorioInmueble repoInmueble = new RepositorioInmueble();
-                ViewBag.Inmuebles = repoInmueble.ObtenerInmuebles();
                 RepositorioInquilino repoInquilino = new RepositorioInquilino();
+
+                ViewBag.Inmuebles = repoInmueble.ObtenerInmuebles();
                 ViewBag.Inquilinos = repoInquilino.ObtenerInquilinos();
+
                 return View();
 			}
 			catch (Exception ex)
@@ -118,5 +122,17 @@ public class ContratoController : Controller
         {
             return Json(new { Error = ex.Message });
         }
+    }
+
+    public IActionResult Detalle(int id)
+    {
+        RepositorioContrato rc = new RepositorioContrato();
+
+        Contrato? contrato = rc.ObtenerContrato(id);
+
+        ViewBag.Inquilino = contrato.Inquilino.Nombre + " " + contrato.Inquilino.Apellido; 
+        ViewBag.Inmueble = contrato.Inmueble.Direccion;
+
+        return View(contrato);
     }
 }
