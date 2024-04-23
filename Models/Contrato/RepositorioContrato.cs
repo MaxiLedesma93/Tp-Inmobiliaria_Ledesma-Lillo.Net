@@ -192,7 +192,6 @@ public class RepositorioContrato
                             Inmueble = new Inmueble{
                                 IdInmueble = reader.GetInt32(nameof(Contrato.InmuebleId)),
                                 Direccion = reader.GetString(nameof(Inmueble.Direccion)),
-                                PropietarioId = reader.GetInt32(nameof(Inmueble.PropietarioId)),
                             }
                         });
                     }
