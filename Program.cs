@@ -1,10 +1,38 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options=>{
+    options.LoginPath = "/Usuarios/Login";
+    options.LogoutPath = "/Usuarios/Logout";
+    options.AccessDeniedPath = "/Home/Restringido";
+});
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Administrador", policy =>
+     policy.RequireRole("Administrador"));
+});
 
 var app = builder.Build();
 
+
+
+
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+app.UseCookiePolicy(new CookiePolicyOptions
+{
+	MinimumSameSitePolicy = SameSiteMode.None,
+});
+app.UseAuthentication();
+app.UseAuthorization();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -13,15 +41,9 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllerRoute("login", "entrar/{**action}", new {Controller = "Usuario", Action="Login"});
 
 app.Run();
