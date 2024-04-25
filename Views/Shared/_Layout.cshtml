@@ -12,9 +12,9 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                @if (!User.Identity.IsAuthenticated) {
+                @if (!User.Identity.IsAuthenticated||User.Identity==null) {
                     <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Inicio </a>
-                    <a class="navbar-brand" href='@Url.Link("login", null)'></a>
+                    <a class="navbar-brand"asp-controller="Usuario" asp-action="Login">Loguearse</a>
                     }
                 else{
                     <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Inmobiliaria Ledesma-Lillo</a>
@@ -45,6 +45,14 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Pago" asp-action="Listado">Pagos</a>
                             </li>
+                            @if(User.IsInRole("Administrador")){
+                                <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Listado">Usuarios</a>
+                            </li>
+                            }
+                            <li class="nav-item"></li>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Perfil">Mi Perfil</a>
+                            
                         </ul>
                     </div>
                     }

@@ -1,6 +1,10 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Mysqlx.Crud;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +21,10 @@ builder.Services.AddAuthorization(options =>
      policy.RequireRole("Administrador"));
 });
 
+
+
 var app = builder.Build();
+
 
 
 
@@ -25,6 +32,7 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 
 app.UseRouting();
 app.UseCookiePolicy(new CookiePolicyOptions

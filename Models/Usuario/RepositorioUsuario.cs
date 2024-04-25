@@ -184,6 +184,35 @@ public class RepositorioUsuario
 			}
 			return 0;
 		}
+		public int EliminarAvatar(Usuario usuario)
+		{
+			using (var connection = new MySqlConnection(connectionString))
+			{
+				var sql = @$"UPDATE usuarios
+				SET {nameof(Usuario.Nombre)} = @{nameof(Usuario.Nombre)},
+				{nameof(Usuario.Apellido)} = @{nameof(Usuario.Apellido)},
+                {nameof(Usuario.Email)} = @{nameof(Usuario.Email)},
+				{nameof(Usuario.Clave)} = @{nameof(Usuario.Clave)},
+				{nameof(Usuario.Avatar)} = @{nameof(Usuario.Avatar)},
+				{nameof(Usuario.Rol)} = @{nameof(Usuario.Rol)}
+				
+				WHERE {nameof(Usuario.IdUsuario)} = @{nameof(Usuario.IdUsuario)}";
+				using (var command = new MySqlCommand(sql, connection))
+				{
+					command.Parameters.AddWithValue($"@{nameof(Usuario.Nombre)}", usuario.Nombre);
+					command.Parameters.AddWithValue($"@{nameof(Usuario.Apellido)}", usuario.Apellido);
+					command.Parameters.AddWithValue($"@{nameof(Usuario.Email)}", usuario.Email);
+					command.Parameters.AddWithValue($"@{nameof(Usuario.Clave)}", usuario.Clave);
+					command.Parameters.AddWithValue($"@{nameof(Usuario.Avatar)}", "");
+					command.Parameters.AddWithValue($"@{nameof(Usuario.Rol)}", usuario.Rol);
+					command.Parameters.AddWithValue($"@{nameof(Usuario.IdUsuario)}", usuario.IdUsuario);
+					connection.Open();
+					command.ExecuteNonQuery();
+					connection.Close();
+				}
+			}
+			return 0;
+		}
 
 
 		public int EliminaUsuario(int id)

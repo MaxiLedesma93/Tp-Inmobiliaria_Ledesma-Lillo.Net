@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tp_Inmobiliaria_Ledesma_Lillo.Models;
 using Tp_Inmobiliaria_Ledesma_Lillo.Net.Controllers;
@@ -14,6 +15,7 @@ public class ContratoController : Controller
         _logger = logger;
     }
 
+    [Authorize]
     public IActionResult Listado()
     {
         try
@@ -33,7 +35,7 @@ public class ContratoController : Controller
             return Json(new { Error = ex.Message });
         }
     }
-
+    [Authorize]
     public IActionResult Editar(int id)
     {
         try
@@ -59,6 +61,7 @@ public class ContratoController : Controller
         }
     }
 
+    [Authorize]
     public IActionResult Crear() //carga el formulario vacio
 		{
 			try
@@ -76,7 +79,7 @@ public class ContratoController : Controller
                 return Json(new { Error = ex.Message });
 			}
 		}
-
+    [Authorize]
     public IActionResult Guardar(Contrato contrato)
     {
         RepositorioContrato rc = new RepositorioContrato();
@@ -108,7 +111,7 @@ public class ContratoController : Controller
         }
 
     }
-
+    [Authorize(Policy = "Administrador")]
     public IActionResult Eliminar(int id)
     {
         RepositorioContrato rc = new RepositorioContrato();
