@@ -157,7 +157,7 @@ public class PagoController : Controller
                 }
                 else
                 {
-                    p.Activo = "Inactivo";
+                    p.Activo = "Anulado";
                 }
             }
     }
