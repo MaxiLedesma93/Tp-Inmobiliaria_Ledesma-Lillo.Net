@@ -237,6 +237,7 @@ public class RepositorioPago
                             FechaPago = reader.GetDateTime(nameof(Pago.FechaPago)),
                             Importe = reader.GetDecimal(nameof(Pago.Importe)),
                             Detalle = reader.GetString(nameof(Pago.Detalle)),
+                            Est = reader.GetInt32(nameof(Pago.Est)),
                             ContratoId = reader.GetInt32(nameof(Pago.ContratoId)),
                             contrato = new Contrato
                             {

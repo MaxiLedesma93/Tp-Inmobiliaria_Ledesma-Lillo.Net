@@ -13,11 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Tp-Inmobiliaria_Ledesma-Lillo.Net")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-<<<<<<< Updated upstream
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3df0fe1d3af0388de9de991fd08305abed6bd246")]
-=======
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f2344f75fe26912563cd9e12623ac9fedecca7f4")]
->>>>>>> Stashed changes
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d8ae1d36ac2596384b4d44960619a36b53f64277")]
 [assembly: System.Reflection.AssemblyProductAttribute("Tp-Inmobiliaria_Ledesma-Lillo.Net")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Tp-Inmobiliaria_Ledesma-Lillo.Net")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
