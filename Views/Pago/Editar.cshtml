@@ -9,30 +9,30 @@
     <div class="col-md-4">
         <form asp-action="Guardar">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" name="IdPago" value="@Model.IdPago" />
+            <input type="hidden" name="IdPago" value="@Model.IdPago"/>
             <div class="form-group">
                 <label asp-for="NumPago" class="control-label"></label>
-                <input asp-for="NumPago" class="form-control"/>
+                <input asp-for="NumPago" class="form-control" disabled/>
                 <span asp-validation-for="NumPago" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Importe" class="control-label"></label>
-                <input asp-for="Importe" class="form-control" />
+                <input asp-for="Importe" class="form-control" disabled/>
                 <span asp-validation-for="Importe" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="FechaPago" class="control-label"></label>
-                <input asp-for="FechaPago" class="form-control" />
+                <input asp-for="FechaPago" class="form-control" disabled/>
                 <span asp-validation-for="FechaPago" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Detalle" class="control-label"></label>
                 <input asp-for="Detalle" class="form-control"/>
-                <span asp-validation-for="Importe" class="text-danger"></span>
+                <span asp-validation-for="Detalle" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ContratoId" class="control-label"></label>
-                <input asp-for="ContratoId" class="form-control" />
+                <input asp-for="ContratoId" class="form-control"disabled/>
                 <span asp-validation-for="ContratoId" class="text-danger"></span>
             </div>
             <br>

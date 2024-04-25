@@ -20,6 +20,9 @@ public class PagoController : Controller
         {
             RepositorioPago rp = new RepositorioPago();
             var lista = rp.ObtenerTodosPagos();
+            if(lista.Count != 0)
+            { validaEstado(lista); }
+            
             ViewBag.id = TempData["id"];
             // TempData es para pasar datos entre acciones
 				// ViewBag/Data es para pasar datos del controlador a la vista
@@ -60,6 +63,8 @@ public class PagoController : Controller
         try
         {
             rp.EliminaPago(id);
+            Pago p = rp.ObtenerPago(id);
+            p.Activo = "Inactivo";
             TempData["Mensaje"] = "Eliminación realizada correctamente";
             return RedirectToAction(nameof(Listado));
         }
@@ -84,6 +89,7 @@ public class PagoController : Controller
                 else
                 {
                     rp.AltaPago(pago);
+                    pago.Est = 0;
                     TempData["id"] = pago.IdPago;
                 }
            }
@@ -107,6 +113,7 @@ public class PagoController : Controller
             {
                 RepositorioPago rp = new RepositorioPago();
                 var pago = rp.ObtenerPago(id);
+                pago.FechaPago = DateTime.Today;
                 TempData["Mensaje"] = "Datos guardados correctamente";
                 return View(pago);
             }
@@ -126,5 +133,32 @@ public class PagoController : Controller
         Pago? pago = rp.ObtenerPago(id);
 
         return View(pago);
+    }
+
+    public IActionResult PagosEliminados()
+    {
+        RepositorioPago rp = new RepositorioPago();
+        var lista = rp.ObtenerPagosEliminados();
+        validaEstado(lista);
+        if(lista.Count == 0)
+        {
+            ViewBag.Mensaje = "No se encontraron registros";
+        }
+        return View(lista);
+    }
+
+    private void validaEstado(IList<Pago> lista)
+    {
+        foreach(Pago p in lista)
+            {
+                if(p.Est == 0)
+                {
+                    p.Activo = "Activo";
+                }
+                else
+                {
+                    p.Activo = "Inactivo";
+                }
+            }
     }
 }

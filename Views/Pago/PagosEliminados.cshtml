@@ -1,17 +1,9 @@
 @model IEnumerable<Tp_Inmobiliaria_Ledesma_Lillo.Models.Pago>
 @{
-    ViewData["Title"] = "Pago";
+    ViewData["Title"] = "Pagos Eliminados";
 }
-<div class="col-md-4">
-        <form asp-action="PagosEliminados">
-            <div class="form-group">
-                <input type="submit" value="Pagos Eliminados" class="btn btn-primary" />
-            </div>
-        </form> 
-</div> 
-<br>           
 <div>
-<h1>Listado de Pagos</h1>
+<h1>Listado de Pagos Eliminados</h1>
 <table class="table table-striped table-hover">
     <thead>
         <tr>
@@ -60,20 +52,14 @@
             <td>
                  @(item.contrato.Inquilino.Apellido)
             </td>
-             <td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Activo)
-            </td>
-			<td>
-				<a asp-action="Editar" asp-route-id="@item.IdPago" title="Editar" class="btn btn-primary"><i class="fa-solid fa-square-pen"></i></a>
-			</td>
-            <td>
-				<a asp-action="Detalle" asp-route-id="@item.IdPago" title="Detalle" class="btn btn-success"><i class="fa-solid fa-circle-info"></i></a>
-			</td>
-            <td>
-                <a asp-action="Eliminar" asp-route-id="@item.IdPago" title="Eliminar" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+</div>
+<div>
+    <a asp-action="Listado">Volver al Listado</a>
 </div>

@@ -114,7 +114,15 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFnb1xMaXN0YWRvLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+<<<<<<< Updated upstream
 [C:/Users/maxim/OneDrive/Documents/GitHub/Tp-Inmobiliaria.Net/Views/Propietario/Crear.cshtml]
+=======
+[C:/Users/Usuario/Documents/GitHub/Tp-Inmobiliaria_Ledesma-Lillo.Net/Views/Pago/PagosEliminados.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFnb1xQYWdvc0VsaW1pbmFkb3MuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Usuario/Documents/GitHub/Tp-Inmobiliaria_Ledesma-Lillo.Net/Views/Propietario/Crear.cshtml]
+>>>>>>> Stashed changes
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvcGlldGFyaW9cQ3JlYXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
