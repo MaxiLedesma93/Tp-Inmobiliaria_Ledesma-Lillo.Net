@@ -1,30 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
+﻿
 using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Net.Http.Headers;
 using Tp_Inmobiliaria_Ledesma_Lillo.Models;
 using Tp_Inmobiliaria_Ledesma_Lillo.Net.Controllers;
-using System.Net.Http.Headers;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.VisualBasic;
-using Microsoft.AspNetCore.Http.Features;
-using Mysqlx.Crud;
+
 
 
 namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
@@ -128,8 +111,10 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
         }
 
     }
+		
 		// GET: Usuario/Editar/5
 		[Authorize]
+		[HttpGet]
 		public ActionResult Perfil()
 		{
 			ViewData["Title"] = "Mi perfil";
@@ -137,6 +122,41 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 			Usuario usuario = ru.ObtenerPorEmail(User.Identity.Name);
 			return View("Perfil", usuario);
 		}
+
+		[Authorize]
+		[HttpPost]
+		public ActionResult Perfil(Usuario usuario){
+			ViewData["Title"] = "Mi perfil";
+			RepositorioUsuario ru = new RepositorioUsuario();
+			Usuario u = ru.ObtenerPorEmail(User.Identity.Name);
+			if (usuario.AvatarFile != null && u.IdUsuario >0)
+			{
+				string wwwPath = environment.WebRootPath;
+				string path = Path.Combine(wwwPath, "Uploads");
+				if (!Directory.Exists(path))
+				{
+					Directory.CreateDirectory(path);
+				}
+				//Path.GetFileName(u.AvatarFile.FileName);//este nombre se puede repetir
+				string fileName = "avatar_" + u.IdUsuario + Path.GetExtension(usuario.AvatarFile.FileName);
+				string pathCompleto = Path.Combine(path, fileName);
+				u.Avatar = Path.Combine("/Uploads", fileName);
+				
+				// Esta operación guarda la foto en memoria en la ruta que necesitamos
+				using (FileStream stream = new FileStream(pathCompleto, FileMode.Create))
+				{
+					usuario.AvatarFile.CopyTo(stream);
+					stream.Dispose();
+				}
+				
+				
+				ru.ModificaUsuario(u);
+				TempData["mensaje"] = "datos guardados correctamente.";
+			}
+
+			return View("Perfil", u);
+		}
+		
 		[Authorize]
 		[HttpPost]
 		public ActionResult borrarAvatar()
@@ -145,17 +165,67 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 			RepositorioUsuario ru = new RepositorioUsuario();
 			var user = ru.ObtenerPorEmail(User.Identity.Name);
 			user.Avatar=" ";
+			var ruta = Path.Combine(environment.WebRootPath, "Uploads", $"avatar_{user.IdUsuario}" + Path.GetExtension(user.Avatar));
+				if (System.IO.File.Exists(ruta))
+					System.IO.File.Delete(ruta);
 			ru.ModificaUsuario(user);
 			return View(vista, user);
 		}
+		
+		[Authorize]
+		public ActionResult EditarPerfil()
+		{
+			ViewData["Title"] = "Mi perfil";
+			RepositorioUsuario ru = new RepositorioUsuario();
+			Usuario usuario = ru.ObtenerPorEmail(User.Identity.Name);
+			return View("EditarPerfil", usuario);
+		}
+
+
 		[HttpPost]
 		[Authorize]
-		public ActionResult Perfil(Usuario usuario){
+		public ActionResult Avatar(Usuario usuario){
+			RepositorioUsuario ru = new RepositorioUsuario();
+			Usuario u = ru.ObtenerUsuario(usuario.IdUsuario);
+
+			if (usuario.AvatarFile != null && u.IdUsuario >0)
+			{
+				string wwwPath = environment.WebRootPath;
+				string path = Path.Combine(wwwPath, "Uploads");
+				if (!Directory.Exists(path))
+				{
+					Directory.CreateDirectory(path);
+				}
+				//Path.GetFileName(u.AvatarFile.FileName);//este nombre se puede repetir
+				string fileName = "avatar_" + u.IdUsuario + Path.GetExtension(usuario.AvatarFile.FileName);
+				string pathCompleto = Path.Combine(path, fileName);
+				u.Avatar = Path.Combine("/Uploads", fileName);
+				
+				// Esta operación guarda la foto en memoria en la ruta que necesitamos
+				using (FileStream stream = new FileStream(pathCompleto, FileMode.Create))
+				{
+					usuario.AvatarFile.CopyTo(stream);
+					stream.Dispose();
+				}
+				
+				
+				ru.ModificaUsuario(u);
+				TempData["mensaje"] = "datos guardados correctamente.";
+			}
+			return RedirectToAction("Perfil",usuario);
+		}
+
+		[HttpPost]
+		[Authorize]
+		public ActionResult EditarPerfil(Usuario usuario){
 
 			var vista = nameof(Perfil);
 			
 			RepositorioUsuario ru = new RepositorioUsuario();
 			Usuario u = ru.ObtenerPorEmail(User.Identity.Name);
+			u.Nombre = usuario.Nombre;
+			u.Apellido = usuario.Apellido;
+			u.Email = usuario.Email;
 			
 			if (usuario.AvatarFile != null && u.IdUsuario >0)
 			{
@@ -182,14 +252,45 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 				TempData["mensaje"] = "datos guardados correctamente.";
 				
 			}
+			
+			ru.ModificaUsuario(u);
 			return RedirectToAction(vista,u);
 		}
 
+		[HttpPost]
+		[Authorize]
+		public ActionResult CambiarPass(Usuario usuario){
+			var vista = nameof(Perfil);
+			ViewData["Title"] = "Mi perfil";
+			RepositorioUsuario ru = new RepositorioUsuario();
+			var user = ru.ObtenerPorEmail(User.Identity.Name);
+			string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+							password: usuario.Clave,
+							salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
+							prf: KeyDerivationPrf.HMACSHA1,
+							iterationCount: 1000,
+							numBytesRequested: 256 / 8));
+			
+			if(user.Clave==hashed){
+				 hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+							password: usuario.clnueva,
+							salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
+							prf: KeyDerivationPrf.HMACSHA1,
+							iterationCount: 1000,
+							numBytesRequested: 256 / 8));
+				
+				user.Clave= hashed;
+				ru.ModificaUsuario(user);
+				usuario.clnueva=""; //borra la claven de texto plano.
+			}
+			
+			return View(vista, user);
 
 
+			
 
-		
-		
+		}
+
 
 		// GET: Usuario/Editar/5
 		[Authorize(Policy = "Administrador")]
@@ -205,7 +306,7 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 		// POST: Usuarios/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		[Authorize]
+		[Authorize(Policy ="Administrador")]
 		public ActionResult Editar(int id, Usuario usuario)
 		{
 			var vista = nameof(Editar);//de que vista provengo
@@ -225,7 +326,17 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 					u.Nombre = usuario.Nombre;
 					u.Apellido = usuario.Apellido;
 					u.Email = usuario.Email;
-					u.Clave = usuario.Clave;
+					//Permite ingresar clave nueva por olvido del 
+					//empleado en caso de ser necesario el formulario no obliga el ingreso de la clave.
+					if(User.IsInRole("Administrador")&&usuario.Clave!=null){
+						string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+								password: usuario.Clave,
+								salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
+								prf: KeyDerivationPrf.HMACSHA1,
+								iterationCount: 1000,
+								numBytesRequested: 256 / 8));
+						u.Clave = hashed;
+					}
 					u.Rol = usuario.Rol;
 					if (usuario.AvatarFile != null && usuario.IdUsuario >0)
 					{
@@ -252,7 +363,9 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 						TempData["mensaje"] = "datos guardados correctamente.";
 						return RedirectToAction(vista,u);
 					}
+					ru.ModificaUsuario(u);
 				}
+				
 				// TODO: Add update logic here
 
 				return RedirectToAction(vista);
@@ -277,12 +390,15 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 		public ActionResult Eliminar(int id, Usuario usuario)
 		{
 			try
+
 			{
-				// TODO: Add delete logic here
+				RepositorioUsuario ru = new RepositorioUsuario();
+
 				var ruta = Path.Combine(environment.WebRootPath, "Uploads", $"avatar_{id}" + Path.GetExtension(usuario.Avatar));
 				if (System.IO.File.Exists(ruta))
 					System.IO.File.Delete(ruta);
-				return RedirectToAction(nameof(Index));
+				ru.EliminaUsuario(id);
+				return RedirectToAction("Listado");
 			}
 			catch
 			{

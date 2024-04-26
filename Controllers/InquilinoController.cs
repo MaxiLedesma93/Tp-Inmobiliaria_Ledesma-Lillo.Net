@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tp_Inmobiliaria_Ledesma_Lillo.Models;
 using Tp_Inmobiliaria_Ledesma_Lillo.Net.Controllers;
@@ -15,6 +16,7 @@ public class InquilinoController : Controller
         _logger = logger;
     }
 
+    [Authorize]
     public IActionResult Listado()
     {
         try
@@ -30,6 +32,7 @@ public class InquilinoController : Controller
         }
     }
 
+    [Authorize]
     public IActionResult Editar(int id)
     {
         try
@@ -49,6 +52,7 @@ public class InquilinoController : Controller
         }
     }
 
+    [Authorize]
     public IActionResult Crear() //carga el formulario vacio
 		{
 			try
@@ -61,6 +65,7 @@ public class InquilinoController : Controller
 			}
 		}
 
+    [Authorize]
     public IActionResult Guardar(Inquilino inquilino)
     {
         RepositorioInquilino ri = new RepositorioInquilino();
@@ -90,6 +95,7 @@ public class InquilinoController : Controller
 
     }
 
+    [Authorize(Policy = "Administrador")]
     public IActionResult Eliminar(int id)
     {
         RepositorioInquilino rp = new RepositorioInquilino();
@@ -104,7 +110,8 @@ public class InquilinoController : Controller
             return Json(new { Error = ex.Message });
         }
     }
-
+    
+    [Authorize]
     public IActionResult Detalle(int id)
     {
         RepositorioInquilino rinq = new RepositorioInquilino();

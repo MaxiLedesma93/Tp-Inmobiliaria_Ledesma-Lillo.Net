@@ -1,13 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Data;
+﻿
 using MySql.Data.MySqlClient;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
-using Microsoft.AspNetCore.Http.Features;
+
 
 namespace Tp_Inmobiliaria_Ledesma_Lillo.Models;
 
@@ -127,108 +120,107 @@ public class RepositorioUsuario
 			return usuario;
 		}
 	}
-		public int AltaUsuario(Usuario usuario)
+	public int AltaUsuario(Usuario usuario)
+	{
+		int id = 0;
+		using (var connection = new MySqlConnection(connectionString))
 		{
-			int id = 0;
-			using (var connection = new MySqlConnection(connectionString))
+			var sql = @$"INSERT INTO usuarios ({nameof(Usuario.Nombre)}, {nameof(Usuario.Apellido)}, {nameof(Usuario.Email)},
+			{nameof(Usuario.Clave)}, {nameof(Usuario.Avatar)}, {nameof(Usuario.Rol)})
+			VALUES (@{nameof(Usuario.Nombre)}, @{nameof(Usuario.Apellido)}, @{nameof(Usuario.Email)},
+			@{nameof(Usuario.Clave)}, @{nameof(Usuario.Avatar)}, @{nameof(Usuario.Rol)});
+			SELECT LAST_INSERT_ID();";
+			using (var command = new MySqlCommand(sql, connection))
 			{
-				var sql = @$"INSERT INTO usuarios ({nameof(Usuario.Nombre)}, {nameof(Usuario.Apellido)}, {nameof(Usuario.Email)},
-				{nameof(Usuario.Clave)}, {nameof(Usuario.Avatar)}, {nameof(Usuario.Rol)})
-				VALUES (@{nameof(Usuario.Nombre)}, @{nameof(Usuario.Apellido)}, @{nameof(Usuario.Email)},
-				@{nameof(Usuario.Clave)}, @{nameof(Usuario.Avatar)}, @{nameof(Usuario.Rol)});
-				SELECT LAST_INSERT_ID();";
-				using (var command = new MySqlCommand(sql, connection))
-				{
-					command.Parameters.AddWithValue($"@{nameof(Usuario.Nombre)}", usuario.Nombre);
-					command.Parameters.AddWithValue($"@{nameof(Usuario.Apellido)}", usuario.Apellido);
-					command.Parameters.AddWithValue($"@{nameof(Usuario.Email)}", usuario.Email);
-					command.Parameters.AddWithValue($"@{nameof(Usuario.Clave)}", usuario.Clave);
-					command.Parameters.AddWithValue($"@{nameof(Usuario.Avatar)}", usuario.Avatar);
-					command.Parameters.AddWithValue($"@{nameof(Usuario.Rol)}", usuario.Rol);
+				command.Parameters.AddWithValue($"@{nameof(Usuario.Nombre)}", usuario.Nombre);
+				command.Parameters.AddWithValue($"@{nameof(Usuario.Apellido)}", usuario.Apellido);
+				command.Parameters.AddWithValue($"@{nameof(Usuario.Email)}", usuario.Email);
+				command.Parameters.AddWithValue($"@{nameof(Usuario.Clave)}", usuario.Clave);
+				command.Parameters.AddWithValue($"@{nameof(Usuario.Avatar)}", usuario.Avatar);
+				command.Parameters.AddWithValue($"@{nameof(Usuario.Rol)}", usuario.Rol);
 
-					connection.Open();
-					id = Convert.ToInt32(command.ExecuteScalar());
-					usuario.IdUsuario = id;
-					connection.Close();
-				}
+				connection.Open();
+				id = Convert.ToInt32(command.ExecuteScalar());
+				usuario.IdUsuario = id;
+				connection.Close();
 			}
-			return id;
 		}
+		return id;
+	}
 
-		public int ModificaUsuario(Usuario usuario)
+	public int ModificaUsuario(Usuario usuario)
+	{
+		using (var connection = new MySqlConnection(connectionString))
 		{
-			using (var connection = new MySqlConnection(connectionString))
+			var sql = @$"UPDATE usuarios
+			SET {nameof(Usuario.Nombre)} = @{nameof(Usuario.Nombre)},
+			{nameof(Usuario.Apellido)} = @{nameof(Usuario.Apellido)},
+			{nameof(Usuario.Email)} = @{nameof(Usuario.Email)},
+			{nameof(Usuario.Clave)} = @{nameof(Usuario.Clave)},
+			{nameof(Usuario.Avatar)} = @{nameof(Usuario.Avatar)},
+			{nameof(Usuario.Rol)} = @{nameof(Usuario.Rol)}
+			
+			WHERE {nameof(Usuario.IdUsuario)} = @{nameof(Usuario.IdUsuario)}";
+			using (var command = new MySqlCommand(sql, connection))
 			{
-				var sql = @$"UPDATE usuarios
-				SET {nameof(Usuario.Nombre)} = @{nameof(Usuario.Nombre)},
-				{nameof(Usuario.Apellido)} = @{nameof(Usuario.Apellido)},
-                {nameof(Usuario.Email)} = @{nameof(Usuario.Email)},
-				{nameof(Usuario.Clave)} = @{nameof(Usuario.Clave)},
-				{nameof(Usuario.Avatar)} = @{nameof(Usuario.Avatar)},
-				{nameof(Usuario.Rol)} = @{nameof(Usuario.Rol)}
-				
-				WHERE {nameof(Usuario.IdUsuario)} = @{nameof(Usuario.IdUsuario)}";
-				using (var command = new MySqlCommand(sql, connection))
-				{
-					command.Parameters.AddWithValue($"@{nameof(Usuario.Nombre)}", usuario.Nombre);
-					command.Parameters.AddWithValue($"@{nameof(Usuario.Apellido)}", usuario.Apellido);
-					command.Parameters.AddWithValue($"@{nameof(Usuario.Email)}", usuario.Email);
-					command.Parameters.AddWithValue($"@{nameof(Usuario.Clave)}", usuario.Clave);
-					command.Parameters.AddWithValue($"@{nameof(Usuario.Avatar)}", usuario.Avatar);
-					command.Parameters.AddWithValue($"@{nameof(Usuario.Rol)}", usuario.Rol);
-					command.Parameters.AddWithValue($"@{nameof(Usuario.IdUsuario)}", usuario.IdUsuario);
-					connection.Open();
-					command.ExecuteNonQuery();
-					connection.Close();
-				}
+				command.Parameters.AddWithValue($"@{nameof(Usuario.Nombre)}", usuario.Nombre);
+				command.Parameters.AddWithValue($"@{nameof(Usuario.Apellido)}", usuario.Apellido);
+				command.Parameters.AddWithValue($"@{nameof(Usuario.Email)}", usuario.Email);
+				command.Parameters.AddWithValue($"@{nameof(Usuario.Clave)}", usuario.Clave);
+				command.Parameters.AddWithValue($"@{nameof(Usuario.Avatar)}", usuario.Avatar);
+				command.Parameters.AddWithValue($"@{nameof(Usuario.Rol)}", usuario.Rol);
+				command.Parameters.AddWithValue($"@{nameof(Usuario.IdUsuario)}", usuario.IdUsuario);
+				connection.Open();
+				command.ExecuteNonQuery();
+				connection.Close();
 			}
-			return 0;
 		}
-		public int EliminarAvatar(Usuario usuario)
+		return 0;
+	}
+	public int EliminarAvatar(Usuario usuario)
+	{
+		using (var connection = new MySqlConnection(connectionString))
 		{
-			using (var connection = new MySqlConnection(connectionString))
+			var sql = @$"UPDATE usuarios
+			SET {nameof(Usuario.Nombre)} = @{nameof(Usuario.Nombre)},
+			{nameof(Usuario.Apellido)} = @{nameof(Usuario.Apellido)},
+			{nameof(Usuario.Email)} = @{nameof(Usuario.Email)},
+			{nameof(Usuario.Clave)} = @{nameof(Usuario.Clave)},
+			{nameof(Usuario.Avatar)} = @{nameof(Usuario.Avatar)},
+			{nameof(Usuario.Rol)} = @{nameof(Usuario.Rol)}
+			
+			WHERE {nameof(Usuario.IdUsuario)} = @{nameof(Usuario.IdUsuario)}";
+			using (var command = new MySqlCommand(sql, connection))
 			{
-				var sql = @$"UPDATE usuarios
-				SET {nameof(Usuario.Nombre)} = @{nameof(Usuario.Nombre)},
-				{nameof(Usuario.Apellido)} = @{nameof(Usuario.Apellido)},
-                {nameof(Usuario.Email)} = @{nameof(Usuario.Email)},
-				{nameof(Usuario.Clave)} = @{nameof(Usuario.Clave)},
-				{nameof(Usuario.Avatar)} = @{nameof(Usuario.Avatar)},
-				{nameof(Usuario.Rol)} = @{nameof(Usuario.Rol)}
-				
-				WHERE {nameof(Usuario.IdUsuario)} = @{nameof(Usuario.IdUsuario)}";
-				using (var command = new MySqlCommand(sql, connection))
-				{
-					command.Parameters.AddWithValue($"@{nameof(Usuario.Nombre)}", usuario.Nombre);
-					command.Parameters.AddWithValue($"@{nameof(Usuario.Apellido)}", usuario.Apellido);
-					command.Parameters.AddWithValue($"@{nameof(Usuario.Email)}", usuario.Email);
-					command.Parameters.AddWithValue($"@{nameof(Usuario.Clave)}", usuario.Clave);
-					command.Parameters.AddWithValue($"@{nameof(Usuario.Avatar)}", "");
-					command.Parameters.AddWithValue($"@{nameof(Usuario.Rol)}", usuario.Rol);
-					command.Parameters.AddWithValue($"@{nameof(Usuario.IdUsuario)}", usuario.IdUsuario);
-					connection.Open();
-					command.ExecuteNonQuery();
-					connection.Close();
-				}
+				command.Parameters.AddWithValue($"@{nameof(Usuario.Nombre)}", usuario.Nombre);
+				command.Parameters.AddWithValue($"@{nameof(Usuario.Apellido)}", usuario.Apellido);
+				command.Parameters.AddWithValue($"@{nameof(Usuario.Email)}", usuario.Email);
+				command.Parameters.AddWithValue($"@{nameof(Usuario.Clave)}", usuario.Clave);
+				command.Parameters.AddWithValue($"@{nameof(Usuario.Avatar)}", "");
+				command.Parameters.AddWithValue($"@{nameof(Usuario.Rol)}", usuario.Rol);
+				command.Parameters.AddWithValue($"@{nameof(Usuario.IdUsuario)}", usuario.IdUsuario);
+				connection.Open();
+				command.ExecuteNonQuery();
+				connection.Close();
 			}
-			return 0;
 		}
+		return 0;
+	}
 
-
-		public int EliminaUsuario(int id)
+	public int EliminaUsuario(int id)
+	{
+		using (var connection = new MySqlConnection(connectionString))
 		{
-			using (var connection = new MySqlConnection(connectionString))
+			var sql = @$"DELETE FROM usuarios
+			WHERE {nameof(Usuario.IdUsuario)} = @{nameof(Usuario.IdUsuario)}";
+			using (var command = new MySqlCommand(sql, connection))
 			{
-				var sql = @$"DELETE FROM usuarios
-				WHERE {nameof(Usuario.IdUsuario)} = @{nameof(Usuario.IdUsuario)}";
-				using (var command = new MySqlCommand(sql, connection))
-				{
-					command.Parameters.AddWithValue($"@{nameof(Usuario.IdUsuario)}", id);
-					connection.Open();
-					command.ExecuteNonQuery();
-					connection.Close();
-				}
+				command.Parameters.AddWithValue($"@{nameof(Usuario.IdUsuario)}", id);
+				connection.Open();
+				command.ExecuteNonQuery();
+				connection.Close();
 			}
-			return 0;
 		}
+		return 0;
+	}
 	}

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tp_Inmobiliaria_Ledesma_Lillo.Models;
 using Tp_Inmobiliaria_Ledesma_Lillo.Net.Controllers;
@@ -13,7 +14,7 @@ public class PagoController : Controller
     {
         _logger = logger;
     }
-
+    [Authorize]
     public IActionResult Listado()
     {
         try
@@ -36,7 +37,9 @@ public class PagoController : Controller
             return Json(new { Error = ex.Message });
         }
     }
+
     [HttpGet]
+    [Authorize]
     public IActionResult Crear(int id)
 	{
 			RepositorioPago rp = new RepositorioPago();
@@ -57,6 +60,7 @@ public class PagoController : Controller
 			}
 	}
 
+    [Authorize(Policy = "Administrador")]
     public IActionResult Eliminar(int id)
     {
         RepositorioPago rp = new RepositorioPago();
@@ -75,6 +79,7 @@ public class PagoController : Controller
     }
 
     [HttpPost]
+    [Authorize]
     public IActionResult Guardar(Pago pago)
     {
         RepositorioPago rp = new RepositorioPago();
@@ -105,6 +110,7 @@ public class PagoController : Controller
         }
     }
 
+    [Authorize]
     public IActionResult Editar(int id)
     {
         try
@@ -126,6 +132,7 @@ public class PagoController : Controller
         }
     }
 
+    [Authorize]
     public IActionResult Detalle(int id)
     {
         RepositorioPago rp = new RepositorioPago();
@@ -135,6 +142,7 @@ public class PagoController : Controller
         return View(pago);
     }
 
+    [Authorize]
     public IActionResult PagosEliminados()
     {
         RepositorioPago rp = new RepositorioPago();
@@ -147,6 +155,7 @@ public class PagoController : Controller
         return View(lista);
     }
 
+    [Authorize]
     private void validaEstado(IList<Pago> lista)
     {
         foreach(Pago p in lista)

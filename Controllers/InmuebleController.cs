@@ -14,6 +14,7 @@ public class InmuebleController : Controller
     {
         _logger = logger;
     }
+
     [Authorize]
     public IActionResult Listado()
     {
@@ -37,6 +38,7 @@ public class InmuebleController : Controller
             return Json(new { Error = ex.Message });
         }
     }
+
     [Authorize]
     public IActionResult Editar(int id)
     {
@@ -60,6 +62,7 @@ public class InmuebleController : Controller
             return Json(new { Error = ex.Message });
         }
     }
+
     [Authorize]
     public IActionResult Crear() //carga el formulario vacio
 		{
@@ -76,6 +79,7 @@ public class InmuebleController : Controller
                 return Json(new { Error = ex.Message });
 			}
 		}
+
     [Authorize]
     public IActionResult Guardar(Inmueble inmueble)
     {
@@ -108,6 +112,7 @@ public class InmuebleController : Controller
         }
 
     }
+
     [Authorize(Policy = "Administrador")]
     public IActionResult Eliminar(int id)
     {
@@ -123,6 +128,7 @@ public class InmuebleController : Controller
             return Json(new { Error = ex.Message });
         }
     }
+    
     [Authorize]
     public IActionResult Detalle(int id)
     {

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Crmf;
 using Tp_Inmobiliaria_Ledesma_Lillo.Models;
@@ -14,7 +15,8 @@ public class TipoController : Controller
     {
         _logger = logger;
     }
-
+    
+    [Authorize]
     public IActionResult Listado()
     {
         try
@@ -35,6 +37,7 @@ public class TipoController : Controller
         }
     }
 
+    [Authorize]
     public IActionResult Crear() //carga el formulario vacio
 		{
 			try
@@ -46,7 +49,8 @@ public class TipoController : Controller
                 return Json(new { Error = ex.Message });
 			}
 		}
-
+    
+    [Authorize(Policy = "Administrador")]
     public IActionResult Eliminar(int id)
     {
         RepositorioTipo rp = new RepositorioTipo();
@@ -62,6 +66,7 @@ public class TipoController : Controller
         }
     }
 
+    [Authorize]
     public IActionResult Guardar(Tipo tipo)
     {
         RepositorioTipo rp = new RepositorioTipo();
@@ -84,6 +89,7 @@ public class TipoController : Controller
         }
     }
 
+    [Authorize]
     public IActionResult Detalle(int id)
     {
         RepositorioTipo rt = new RepositorioTipo();

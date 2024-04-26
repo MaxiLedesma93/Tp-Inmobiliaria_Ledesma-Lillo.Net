@@ -20,7 +20,7 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models
 	{
 		[Key]
 		[Display(Name = "Código")]
-		public int? IdUsuario { get; set; }
+		public int IdUsuario { get; set; }
 		[Required]
 		public string? Nombre { get; set; }
 		[Required]
@@ -39,6 +39,7 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models
 		public int Rol { get; set; }
 		[NotMapped]//Para EF
 		public string RolNombre => Rol > 0 ? ((enRoles)Rol).ToString() : "";
+		public string? clnueva { get; set; }
 
 		public   IDictionary<int, string> ObtenerRoles()
 		{

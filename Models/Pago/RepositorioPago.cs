@@ -195,7 +195,7 @@ public class RepositorioPago
 		return res;
 	}
 
-     public int EliminaPago(int id)
+    public int EliminaPago(int id)
 	{
 		using(var connection = new MySqlConnection(connectionString))
 		{

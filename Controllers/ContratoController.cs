@@ -35,6 +35,7 @@ public class ContratoController : Controller
             return Json(new { Error = ex.Message });
         }
     }
+
     [Authorize]
     public IActionResult Editar(int id)
     {
@@ -79,6 +80,7 @@ public class ContratoController : Controller
                 return Json(new { Error = ex.Message });
 			}
 		}
+
     [Authorize]
     public IActionResult Guardar(Contrato contrato)
     {
@@ -111,6 +113,7 @@ public class ContratoController : Controller
         }
 
     }
+
     [Authorize(Policy = "Administrador")]
     public IActionResult Eliminar(int id)
     {
@@ -126,7 +129,8 @@ public class ContratoController : Controller
             return Json(new { Error = ex.Message });
         }
     }
-
+    
+    [Authorize]
     public IActionResult Detalle(int id)
     {
         RepositorioContrato rc = new RepositorioContrato();
