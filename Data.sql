@@ -3,15 +3,46 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-04-2024 a las 16:40:45
+-- Tiempo de generación: 26-04-2024 a las 22:18:49
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de datos: `ledesmalillo`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `contratos`
+--
+
+CREATE TABLE `contratos` (
+  `IdContrato` int(11) NOT NULL,
+  `InquilinoId` int(11) NOT NULL,
+  `InmuebleId` int(11) NOT NULL,
+  `FecInicio` datetime NOT NULL,
+  `FecFin` datetime NOT NULL,
+  `Monto` decimal(10,0) NOT NULL,
+  `Estado` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `contratos`
 --
 
 INSERT INTO `contratos` (`IdContrato`, `InquilinoId`, `InmuebleId`, `FecInicio`, `FecFin`, `Monto`, `Estado`) VALUES
-(12, 2, 5, '2024-04-23 14:20:00', '2024-07-23 14:20:00', '56000', 0);
+(12, 2, 5, '2024-04-23 14:20:00', '2024-07-31 14:20:00', '90000', 0);
 
 -- --------------------------------------------------------
 
@@ -37,8 +68,9 @@ CREATE TABLE `inmuebles` (
 --
 
 INSERT INTO `inmuebles` (`IdInmueble`, `Direccion`, `Ambientes`, `Superficie`, `Latitud`, `Longitud`, `Uso`, `PropietarioId`, `TipoId`, `Importe`) VALUES
-(5, 'Colon 123', 3, 80, '12', '13', 'residencial', 2, 4, 90000),
-(6, 'Maipu 2546', 5, 100, '33', '45', 'Comercial', 3, 4, 80000);
+(5, 'Colon 123', 4, 80, '12', '13', 'residencial', 2, 4, 90000),
+(6, 'Maipu 2546', 5, 100, '33', '45', 'Comercial', 3, 4, 80000),
+(8, 'Mendoza 123', 3, 78, '12', '13', 'Residencial', 7, 6, 80000);
 
 -- --------------------------------------------------------
 
@@ -60,7 +92,7 @@ CREATE TABLE `inquilinos` (
 --
 
 INSERT INTO `inquilinos` (`IdInquilino`, `Nombre`, `Apellido`, `Dni`, `Telefono`, `Email`) VALUES
-(2, 'fabian', 'jofre', '28', '29', 'fabian@mail.com'),
+(2, 'Nelson', 'jofre', '28', '29', 'fabian@mail.com'),
 (3, 'Gonzalo', 'jofre', '24', '25', 'samuel@mail.com');
 
 -- --------------------------------------------------------
@@ -86,7 +118,8 @@ CREATE TABLE `pagos` (
 INSERT INTO `pagos` (`IdPago`, `NumPago`, `FechaPago`, `ContratoId`, `Importe`, `Detalle`, `Est`) VALUES
 (30, 1, '2024-04-24 00:00:00', 12, '56000', 'Abril', 1),
 (31, 2, '2024-04-25 00:00:00', 12, '56000', 'Mayo', 1),
-(32, 1, '2024-04-25 00:00:00', 12, '56000', 'Abril', 0);
+(32, 1, '2024-04-25 00:00:00', 12, '56000', 'Abril', 0),
+(33, 2, '2024-04-30 00:00:00', 12, '90000', 'Efectivo', 0);
 
 -- --------------------------------------------------------
 
@@ -109,9 +142,10 @@ CREATE TABLE `propietarios` (
 --
 
 INSERT INTO `propietarios` (`IdPropietario`, `Nombre`, `Apellido`, `Dni`, `Email`, `Telefono`, `Clave`) VALUES
-(2, 'Lucila', 'Lillo', '28732977', 'lula@mail.com', '2645092927', '123'),
+(2, 'Sandra', 'Lillo', '28732977', 'lula@mail.com', '2645092927', '123'),
 (3, 'Fabian', 'Jofre', '28742651', 'nelson@mail.com', '1234', '123'),
-(6, 'Mariano Ramiro', 'Lillo', '111111', 'mariano@mail.com', '222222', '123');
+(6, 'Mariano Ramiro', 'Lillo', '111111', 'mariano@mail.com', '222222', '123'),
+(7, 'Jose', 'Lopez', '1', 'jose@mail.com', '2', '');
 
 -- --------------------------------------------------------
 
@@ -132,7 +166,8 @@ INSERT INTO `tipos` (`IdTipo`, `Descripcion`) VALUES
 (4, 'Local'),
 (5, 'Depósito'),
 (6, 'Casa'),
-(7, 'Departamento');
+(7, 'Departamento'),
+(8, 'Quinta');
 
 -- --------------------------------------------------------
 
@@ -156,7 +191,7 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`IdUsuario`, `Nombre`, `Apellido`, `Email`, `Clave`, `Avatar`, `Rol`) VALUES
 (54, 'Maximiliano Alberto', 'Ledesma', 'maximiliano@gmail.com', 'myl4T6FgkMUdldPQ96rZUnNYn0ho5fyVIc39WWFLd8Y=', ' ', 1),
-(55, 'Lucila', 'Lillo', 'lula@mail.com', 'GAKKw6Co5EiIGNiZC1OfQC6offL+e8CoEs3SX0LIrHA=', '', 2),
+(55, 'Lucila', 'Lillo', 'lula@mail.com', '3A0G2+zJ3luLnlC44+Xe5HGw/9RWJNoyF2XZACvev20=', '', 1),
 (56, 'Marcos', 'Galperin', 'marcos@gmail.com', 'myl4T6FgkMUdldPQ96rZUnNYn0ho5fyVIc39WWFLd8Y=', '', 2);
 
 --
@@ -224,7 +259,7 @@ ALTER TABLE `contratos`
 -- AUTO_INCREMENT de la tabla `inmuebles`
 --
 ALTER TABLE `inmuebles`
-  MODIFY `IdInmueble` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `IdInmueble` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `inquilinos`
@@ -236,19 +271,19 @@ ALTER TABLE `inquilinos`
 -- AUTO_INCREMENT de la tabla `pagos`
 --
 ALTER TABLE `pagos`
-  MODIFY `IdPago` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `IdPago` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT de la tabla `propietarios`
 --
 ALTER TABLE `propietarios`
-  MODIFY `IdPropietario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `IdPropietario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `tipos`
 --
 ALTER TABLE `tipos`
-  MODIFY `IdTipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `IdTipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
@@ -283,35 +318,4 @@ COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Base de datos: `ledesmalillo`
---
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `contratos`
---
-
-CREATE TABLE `contratos` (
-  `IdContrato` int(11) NOT NULL,
-  `InquilinoId` int(11) NOT NULL,
-  `InmuebleId` int(11) NOT NULL,
-  `FecInicio` datetime NOT NULL,
-  `FecFin` datetime NOT NULL,
-  `Monto` decimal(10,0) NOT NULL,
-  `Estado` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `contratos`
-
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
