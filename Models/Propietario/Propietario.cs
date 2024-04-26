@@ -17,8 +17,8 @@ public class Propietario
 		public string? Telefono { get; set; }
 		[Required, EmailAddress]
 		public string? Email { get; set; }
-		[Required, DataType(DataType.Password)]
-		public string? Clave { get; set; }
+		//[Required, DataType(DataType.Password)]
+		//public string? Clave { get; set; }
 
 		public override string ToString()
 		{

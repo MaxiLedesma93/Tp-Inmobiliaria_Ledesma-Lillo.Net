@@ -123,8 +123,8 @@ public class RepositorioInmueble
                     {nameof(Inmueble.Uso)}, 
                     {nameof(Inmueble.Longitud)},
                     {nameof(Inmueble.PropietarioId)}, 
-                    {nameof(Inmueble.TipoId)}),
-                    {nameof(Inmueble.Importe)},
+                    {nameof(Inmueble.TipoId)},
+                    {nameof(Inmueble.Importe)})
 
                     VALUES (@{nameof(Inmueble.Direccion)}, 
                     @{nameof(Inmueble.Ambientes)}, 
@@ -133,7 +133,7 @@ public class RepositorioInmueble
                     @{nameof(Inmueble.Uso)}, 
                     @{nameof(Inmueble.Longitud)}, 
                     @{nameof(Inmueble.PropietarioId)}, 
-                    @{nameof(Inmueble.TipoId)}),
+                    @{nameof(Inmueble.TipoId)},
                     @{nameof(Inmueble.Importe)});
                     
                     SELECT LAST_INSERT_ID();";

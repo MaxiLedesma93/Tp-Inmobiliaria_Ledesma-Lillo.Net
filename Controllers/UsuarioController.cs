@@ -226,6 +226,7 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 			u.Nombre = usuario.Nombre;
 			u.Apellido = usuario.Apellido;
 			u.Email = usuario.Email;
+			u.Rol = usuario.Rol;
 			
 			if (usuario.AvatarFile != null && u.IdUsuario >0)
 			{

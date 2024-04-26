@@ -48,13 +48,10 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
-		    @if(User.IsInRole("Administrador"))
-            {
                 <td>
                     <a asp-action="Editar" asp-route-id="@item.IdInquilino" title="Editar" class="btn btn-primary"><i class="fa-solid fa-square-pen"></i></a>
                     
                 </td>
-            }
             <td>
 				<a asp-action="Detalle" asp-route-id="@item.IdInquilino" title="Detalle" class="btn btn-success"><i class="fa-solid fa-circle-info"></i></a>
 			</td>
