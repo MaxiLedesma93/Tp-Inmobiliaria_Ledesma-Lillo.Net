@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "YgAxieQ1Qw10o8AbFXVJkaajiJNDzNjY6ZhmLHS9mE8=",
+  "Hash": "pOirsCOTQNc2X/4GptofHn9588LW8Ea7mSzGzuc5e0Y=",
   "Source": "Tp-Inmobiliaria_Ledesma-Lillo.Net",
   "BasePath": "_content/Tp-Inmobiliaria_Ledesma-Lillo.Net",
   "Mode": "Default",
@@ -1193,6 +1193,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\lib\\jquery\\LICENSE.txt"
+    },
+    {
+      "Identity": "C:\\Users\\maxim\\OneDrive\\Documents\\GitHub\\Tp-Inmobiliaria.Net\\wwwroot\\Uploads\\avatar_58.png",
+      "SourceId": "Tp-Inmobiliaria_Ledesma-Lillo.Net",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\maxim\\OneDrive\\Documents\\GitHub\\Tp-Inmobiliaria.Net\\wwwroot\\",
+      "BasePath": "_content/Tp-Inmobiliaria_Ledesma-Lillo.Net",
+      "RelativePath": "Uploads/avatar_58.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Uploads\\avatar_58.png"
     }
   ]
 }

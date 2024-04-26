@@ -103,7 +103,7 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 				TempData["id"] = usuario.IdUsuario; 
 			}
 		
-			return RedirectToAction(nameof(Index));
+			return RedirectToAction(nameof(Listado));
         }
         catch(Exception ex)
         {
