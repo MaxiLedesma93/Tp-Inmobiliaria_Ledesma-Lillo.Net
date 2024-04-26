@@ -18,7 +18,8 @@ public class RepositorioPago
 			using(var connection = new MySqlConnection(connectionString))
             {
                 var sql = @$"Select {nameof(Pago.IdPago)}, {nameof(Pago.NumPago)}, {nameof(Pago.FechaPago)}, {nameof(Pago.Importe)},
-                                {nameof(Pago.ContratoId)}, {nameof(Pago.Detalle)}, {nameof(Pago.Est)}, {nameof(Contrato.InquilinoId)}, {nameof(Inquilino.Apellido)}
+                                {nameof(Pago.ContratoId)}, {nameof(Pago.Detalle)}, {nameof(Pago.Est)}, {nameof(Contrato.InquilinoId)}, 
+                                {nameof(Inquilino.Apellido)}, {nameof(Inquilino.Nombre)}
                             from pagos p INNER JOIN contratos c ON p.ContratoId = c.IdContrato
                             INNER JOIN inquilinos inq ON c.InquilinoId = inq.IdInquilino";
                             
@@ -45,6 +46,7 @@ public class RepositorioPago
                                 {
                                     IdInquilino = reader.GetInt32(nameof(Contrato.InquilinoId)),
                                     Apellido = reader.GetString(nameof(Inquilino.Apellido)),
+                                    Nombre = reader.GetString(nameof(Inquilino.Nombre)),
                                 }
                             }
                         });
@@ -94,7 +96,8 @@ public class RepositorioPago
 			using(var connection = new MySqlConnection(connectionString))
             {
                 var sql = @$"Select {nameof(Pago.IdPago)}, {nameof(Pago.NumPago)}, {nameof(Pago.FechaPago)}, {nameof(Pago.Importe)},
-                                {nameof(Pago.ContratoId)}, {nameof(Pago.Detalle)}, {nameof(Pago.Est)}, {nameof(Contrato.InquilinoId)}, {nameof(Inquilino.Apellido)}
+                                {nameof(Pago.ContratoId)}, {nameof(Pago.Detalle)}, {nameof(Pago.Est)}, {nameof(Contrato.InquilinoId)}, 
+                                {nameof(Inquilino.Apellido)}, {nameof(Inquilino.Nombre)}
                             from pagos p INNER JOIN contratos c ON p.ContratoId = c.IdContrato
                             INNER JOIN inquilinos inq ON c.InquilinoId = inq.IdInquilino
                             WHERE p.Est = 0";
@@ -123,6 +126,7 @@ public class RepositorioPago
                                 {
                                     IdInquilino = reader.GetInt32(nameof(Contrato.InquilinoId)),
                                     Apellido = reader.GetString(nameof(Inquilino.Apellido)),
+                                    Nombre = reader.GetString(nameof(Inquilino.Nombre)),
                                 }
 
                             }
@@ -220,7 +224,8 @@ public class RepositorioPago
 			using(var connection = new MySqlConnection(connectionString))
             {
                 var sql = @$"Select {nameof(Pago.IdPago)}, {nameof(Pago.NumPago)}, {nameof(Pago.FechaPago)}, {nameof(Pago.Importe)},
-                                {nameof(Pago.ContratoId)}, {nameof(Pago.Detalle)}, {nameof(Pago.Est)}, {nameof(Contrato.InquilinoId)}, {nameof(Inquilino.Apellido)}
+                                {nameof(Pago.ContratoId)}, {nameof(Pago.Detalle)}, {nameof(Pago.Est)}, {nameof(Contrato.InquilinoId)}, 
+                                {nameof(Inquilino.Apellido)}, {nameof(Inquilino.Nombre)}
                             from pagos p INNER JOIN contratos c ON p.ContratoId = c.IdContrato
                             INNER JOIN inquilinos inq ON c.InquilinoId = inq.IdInquilino
                             WHERE p.Est = 1";
@@ -247,6 +252,7 @@ public class RepositorioPago
                                 {
                                     IdInquilino = reader.GetInt32(nameof(Contrato.InquilinoId)),
                                     Apellido = reader.GetString(nameof(Inquilino.Apellido)),
+                                    Nombre = reader.GetString(nameof(Inquilino.Nombre))
                                 }
                             }
                         });

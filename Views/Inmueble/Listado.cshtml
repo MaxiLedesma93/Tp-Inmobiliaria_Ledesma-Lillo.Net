@@ -25,6 +25,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.PropietarioId)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Importe)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -45,6 +48,9 @@
             </td>
             <td>
                @(item.Duenio.Nombre + " " + item.Duenio.Apellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Importe)
             </td>
             @if(User.IsInRole("Administrador")){
                 <td>

@@ -50,7 +50,7 @@
                 @Html.DisplayFor(modelItem => item.ContratoId)
             </td>
             <td>
-                 @(item.contrato.Inquilino.Apellido)
+                @(item.contrato.Inquilino.Apellido + " " + item.contrato.Inquilino.Nombre)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Activo)

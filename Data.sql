@@ -3,42 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-04-2024 a las 20:34:37
+-- Tiempo de generación: 26-04-2024 a las 16:40:45
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Base de datos: `ledesmalillo`
---
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `contratos`
---
-
-CREATE TABLE `contratos` (
-  `IdContrato` int(11) NOT NULL,
-  `InquilinoId` int(11) NOT NULL,
-  `InmuebleId` int(11) NOT NULL,
-  `FecInicio` datetime NOT NULL,
-  `FecFin` datetime NOT NULL,
-  `Monto` decimal(10,0) NOT NULL,
-  `Estado` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `contratos`
 --
 
 INSERT INTO `contratos` (`IdContrato`, `InquilinoId`, `InmuebleId`, `FecInicio`, `FecFin`, `Monto`, `Estado`) VALUES
@@ -59,16 +28,17 @@ CREATE TABLE `inmuebles` (
   `Longitud` decimal(10,0) NOT NULL,
   `Uso` varchar(100) NOT NULL,
   `PropietarioId` int(11) NOT NULL,
-  `TipoId` int(11) NOT NULL
+  `TipoId` int(11) NOT NULL,
+  `Importe` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `inmuebles`
 --
 
-INSERT INTO `inmuebles` (`IdInmueble`, `Direccion`, `Ambientes`, `Superficie`, `Latitud`, `Longitud`, `Uso`, `PropietarioId`, `TipoId`) VALUES
-(5, 'Colon 123', 3, 80, '12', '13', 'residencial', 2, 4),
-(6, 'Maipu 2546', 5, 100, '33', '45', 'Comercial', 3, 4);
+INSERT INTO `inmuebles` (`IdInmueble`, `Direccion`, `Ambientes`, `Superficie`, `Latitud`, `Longitud`, `Uso`, `PropietarioId`, `TipoId`, `Importe`) VALUES
+(5, 'Colon 123', 3, 80, '12', '13', 'residencial', 2, 4, 90000),
+(6, 'Maipu 2546', 5, 100, '33', '45', 'Comercial', 3, 4, 80000);
 
 -- --------------------------------------------------------
 
@@ -114,8 +84,9 @@ CREATE TABLE `pagos` (
 --
 
 INSERT INTO `pagos` (`IdPago`, `NumPago`, `FechaPago`, `ContratoId`, `Importe`, `Detalle`, `Est`) VALUES
-(30, 1, '2024-04-24 00:00:00', 12, '56000', 'Abril', 0),
-(31, 2, '2024-04-25 00:00:00', 12, '56000', 'Mayo', 1);
+(30, 1, '2024-04-24 00:00:00', 12, '56000', 'Abril', 1),
+(31, 2, '2024-04-25 00:00:00', 12, '56000', 'Mayo', 1),
+(32, 1, '2024-04-25 00:00:00', 12, '56000', 'Abril', 0);
 
 -- --------------------------------------------------------
 
@@ -184,7 +155,9 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`IdUsuario`, `Nombre`, `Apellido`, `Email`, `Clave`, `Avatar`, `Rol`) VALUES
-(54, 'Maximiliano Alberto', 'Ledesma', 'maximiliano@gmail.com', 'myl4T6FgkMUdldPQ96rZUnNYn0ho5fyVIc39WWFLd8Y=', ' ', 1);
+(54, 'Maximiliano Alberto', 'Ledesma', 'maximiliano@gmail.com', 'myl4T6FgkMUdldPQ96rZUnNYn0ho5fyVIc39WWFLd8Y=', ' ', 1),
+(55, 'Lucila', 'Lillo', 'lula@mail.com', 'GAKKw6Co5EiIGNiZC1OfQC6offL+e8CoEs3SX0LIrHA=', '', 2),
+(56, 'Marcos', 'Galperin', 'marcos@gmail.com', 'myl4T6FgkMUdldPQ96rZUnNYn0ho5fyVIc39WWFLd8Y=', '', 2);
 
 --
 -- Índices para tablas volcadas
@@ -232,6 +205,12 @@ ALTER TABLE `tipos`
   ADD PRIMARY KEY (`IdTipo`);
 
 --
+-- Indices de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD PRIMARY KEY (`IdUsuario`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -257,7 +236,7 @@ ALTER TABLE `inquilinos`
 -- AUTO_INCREMENT de la tabla `pagos`
 --
 ALTER TABLE `pagos`
-  MODIFY `IdPago` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `IdPago` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT de la tabla `propietarios`
@@ -270,6 +249,12 @@ ALTER TABLE `propietarios`
 --
 ALTER TABLE `tipos`
   MODIFY `IdTipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  MODIFY `IdUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- Restricciones para tablas volcadas
@@ -298,6 +283,35 @@ COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;START TRANSACTION;
+SET time_zone = "+00:00";
 
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de datos: `ledesmalillo`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `contratos`
+--
+
+CREATE TABLE `contratos` (
+  `IdContrato` int(11) NOT NULL,
+  `InquilinoId` int(11) NOT NULL,
+  `InmuebleId` int(11) NOT NULL,
+  `FecInicio` datetime NOT NULL,
+  `FecFin` datetime NOT NULL,
+  `Monto` decimal(10,0) NOT NULL,
+  `Estado` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `contratos`
 

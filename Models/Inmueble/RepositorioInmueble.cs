@@ -18,7 +18,7 @@ public class RepositorioInmueble
         {
             var sql = @$"Select {nameof(Inmueble.IdInmueble)}, {nameof(Inmueble.PropietarioId)}, {nameof(Propietario.Nombre)}, {nameof(Propietario.Apellido)},
                            {nameof(Inmueble.Ambientes)}, {nameof(Inmueble.Direccion)}, {nameof(Inmueble.Uso)}, {nameof(Inmueble.Latitud)},
-                           {nameof(Inmueble.Longitud)}, {nameof(Inmueble.Superficie)}, {nameof(Propietario.Nombre)}, {nameof(Propietario.Apellido)},
+                           {nameof(Inmueble.Longitud)}, {nameof(Inmueble.Superficie)}, {nameof(Inmueble.Importe)}, {nameof(Propietario.Nombre)}, {nameof(Propietario.Apellido)},
                            {nameof(Inmueble.TipoId)}, {nameof(Tipo.Descripcion)}
                            from inmuebles i INNER JOIN propietarios p ON i.PropietarioId = p.IdPropietario
                            INNER JOIN tipos t ON i.TipoId = t.IdTipo";
@@ -39,6 +39,7 @@ public class RepositorioInmueble
                             Latitud = reader.GetDecimal(nameof(Inmueble.Latitud)),
                             Longitud = reader.GetDecimal(nameof(Inmueble.Longitud)),
                             Superficie = reader.GetInt32(nameof(Inmueble.Superficie)),
+                            Importe = reader.GetInt32(nameof(Inmueble.Importe)),
                             Duenio = new Propietario
                             {
                                 IdPropietario = reader.GetInt32(nameof(Inmueble.PropietarioId)),
@@ -66,7 +67,7 @@ public class RepositorioInmueble
         {
             var sql = @$"SELECT {nameof(Inmueble.IdInmueble)},{nameof(Inmueble.PropietarioId)}, {nameof(Propietario.Nombre)}, {nameof(Propietario.Apellido)},
                            {nameof(Inmueble.Ambientes)}, {nameof(Inmueble.Direccion)}, {nameof(Inmueble.Uso)}, {nameof(Inmueble.Latitud)},
-                           {nameof(Inmueble.Longitud)}, {nameof(Inmueble.Superficie)},
+                           {nameof(Inmueble.Longitud)}, {nameof(Inmueble.Superficie)}, {nameof(Inmueble.Importe)},
                            {nameof(Inmueble.TipoId)}, {nameof(Tipo.Descripcion)} 
                            FROM inmuebles i INNER JOIN propietarios p ON i.PropietarioId = p.IdPropietario
                            INNER JOIN tipos t ON i.TipoId = t.IdTipo
@@ -89,6 +90,7 @@ public class RepositorioInmueble
                             Latitud = reader.GetDecimal(nameof(Inmueble.Latitud)),
                             Longitud = reader.GetDecimal(nameof(Inmueble.Longitud)),
                             Superficie = reader.GetInt32(nameof(Inmueble.Superficie)),
+                            Importe = reader.GetInt32(nameof(Inmueble.Importe)),
                             Duenio = new Propietario
                             {
                                 IdPropietario = reader.GetInt32(nameof(Inmueble.PropietarioId)),
@@ -121,7 +123,8 @@ public class RepositorioInmueble
                     {nameof(Inmueble.Uso)}, 
                     {nameof(Inmueble.Longitud)},
                     {nameof(Inmueble.PropietarioId)}, 
-                    {nameof(Inmueble.TipoId)})
+                    {nameof(Inmueble.TipoId)}),
+                    {nameof(Inmueble.Importe)},
 
                     VALUES (@{nameof(Inmueble.Direccion)}, 
                     @{nameof(Inmueble.Ambientes)}, 
@@ -130,7 +133,8 @@ public class RepositorioInmueble
                     @{nameof(Inmueble.Uso)}, 
                     @{nameof(Inmueble.Longitud)}, 
                     @{nameof(Inmueble.PropietarioId)}, 
-                    @{nameof(Inmueble.TipoId)});
+                    @{nameof(Inmueble.TipoId)}),
+                    @{nameof(Inmueble.Importe)});
                     
                     SELECT LAST_INSERT_ID();";
             using (var command = new MySqlCommand(sql, connection))
@@ -144,6 +148,8 @@ public class RepositorioInmueble
                 command.Parameters.AddWithValue($"@{nameof(Inmueble.Superficie)}", inmueble.Superficie);
                 command.Parameters.AddWithValue($"@{nameof(Inmueble.PropietarioId)}", inmueble.PropietarioId);
                 command.Parameters.AddWithValue($"@{nameof(Inmueble.TipoId)}", inmueble.TipoId);
+                command.Parameters.AddWithValue($"@{nameof(Inmueble.Importe)}", inmueble.Importe);
+
 
                 connection.Open();
                 id = Convert.ToInt32(command.ExecuteScalar());
@@ -167,7 +173,8 @@ public class RepositorioInmueble
                     {nameof(Inmueble.Longitud)} = @{nameof(Inmueble.Longitud)},
                     {nameof(Inmueble.Superficie)} = @{nameof(Inmueble.Superficie)},
                     {nameof(Inmueble.PropietarioId)} = @{nameof(Inmueble.PropietarioId)},
-                    {nameof(Inmueble.TipoId)} = @{nameof(Inmueble.TipoId)}
+                    {nameof(Inmueble.TipoId)} = @{nameof(Inmueble.TipoId)},
+                    {nameof(Inmueble.Importe)} = @{nameof(Inmueble.Importe)}
                     WHERE {nameof(Inmueble.IdInmueble)} = @{nameof(Inmueble.IdInmueble)}";
             using (var command = new MySqlCommand(sql, connection))
             {
@@ -180,6 +187,7 @@ public class RepositorioInmueble
                 command.Parameters.AddWithValue($"@{nameof(Inmueble.PropietarioId)}", inmueble.PropietarioId);
                 command.Parameters.AddWithValue($"@{nameof(Inmueble.TipoId)}", inmueble.TipoId);
                 command.Parameters.AddWithValue($"@{nameof(Inmueble.IdInmueble)}", inmueble.IdInmueble);
+                command.Parameters.AddWithValue($"@{nameof(Inmueble.Importe)}", inmueble.Importe);
 
                 connection.Open();
                 command.ExecuteNonQuery();

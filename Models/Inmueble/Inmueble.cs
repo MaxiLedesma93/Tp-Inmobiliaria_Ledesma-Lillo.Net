@@ -26,8 +26,10 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models
 
 		[Display(Name = "Tipo Inmueble")]
 		public int TipoId {get; set;}
+        public Tipo? TipoInmueble {get; set;}
 
-		public Tipo? TipoInmueble {get; set;}
+		[Display(Name = "Importe")]
+		public int Importe {get; set;}
    }
    
 }
