@@ -30,6 +30,11 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models
 
 		[Display(Name = "Importe")]
 		public int Importe {get; set;}
+
+		[Display(Name = "Disponible")]
+		public int Disponible {get; set;}
+
+		public string? Disp {get; set;}
    }
    
 }

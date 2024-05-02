@@ -45,10 +45,22 @@
                 <span asp-validation-for="Longitud" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Uso" class="control-label"></label>
-                <input asp-for="Uso" class="form-control" />
-                <span asp-validation-for="Uso" class="text-danger"></span>
-            </div>
+            <div class="form-group">
+				<label class="control-label">Uso</label>
+				<select class="form-control" name="Uso">
+					<option value="Residencial">Residencial</option>
+                    <option value="Comercial">Comercial</option>
+				</select>
+				<span asp-validation-for="Uso" class="text-danger"></span>
+			</div>
+            <div class="form-group">
+				<label class="control-label">Disponible</label>
+				<select class="form-control" name="Disp">
+					<option value="Disponible">Disponible</option>
+                    <option value="No Disponible">No Disponible</option>
+				</select>
+				<span asp-validation-for="Disp" class="text-danger"></span>
+			</div>                
             <div class="form-group">
 				<label class="control-label">Tipo Inmueble</label>
 				<select class="form-control" name="TipoId">

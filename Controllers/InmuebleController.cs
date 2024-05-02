@@ -8,7 +8,6 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers;
 public class InmuebleController : Controller 
 {
     private readonly ILogger<HomeController> _logger;
-    
 
     public InmuebleController(ILogger<HomeController> logger)
     {
@@ -31,6 +30,7 @@ public class InmuebleController : Controller
 				// Si viene alguno valor por el tempdata, lo paso al viewdata/viewbag
 				if (TempData.ContainsKey("Mensaje"))
 					ViewBag.Mensaje = TempData["Mensaje"];
+            validaDisponibles(lista);
             return View(lista);
         }
         catch(Exception ex)
@@ -45,12 +45,20 @@ public class InmuebleController : Controller
         try
         {
             if(id > 0)
-            {   RepositorioPropietario repoPropietario = new RepositorioPropietario();
+            {   
+                IList<String> listaDisponibilidad = new List<String>();
+                IList<String> listaUso = new List<String>();
+                cargarLista(listaDisponibilidad, listaUso);
+                
+                RepositorioPropietario repoPropietario = new RepositorioPropietario();
                 ViewBag.Propietarios = repoPropietario.ObtenerPropietarios();
                 RepositorioTipo rt = new RepositorioTipo();
                 ViewBag.Tipos = rt.ObtenerTiposInmuebles();
                 RepositorioInmueble rinmu = new RepositorioInmueble();
                 var inmueble = rinmu.ObtenerInmueble(id);
+                ViewBag.Disponibilidad = listaDisponibilidad;
+                ViewBag.Uso = listaUso;
+                validaDisponible(inmueble);
                 TempData["Mensaje"] = "Datos guardados correctamente";
                 return View(inmueble);
             }
@@ -92,11 +100,13 @@ public class InmuebleController : Controller
            {
                 if(inmueble.IdInmueble > 0)
                 {   
+                    disp(inmueble);
                     rinmu.ModificaInmueble(inmueble);
                 }
                 else{
                     
                     rinmu.AltaInmueble(inmueble);
+                    disp(inmueble);
                     TempData["id"] = inmueble.IdInmueble; 
                 }
            }
@@ -137,7 +147,55 @@ public class InmuebleController : Controller
         Inmueble? inmu = rinmu.ObtenerInmueble(id);
         ViewBag.Propietario = inmu.Duenio.Nombre + " " + inmu.Duenio.Apellido;
         ViewBag.Tipo = inmu.TipoInmueble.Descripcion;
-
+        validaDisponible(inmu);
         return View(inmu);
+    }
+
+    [Authorize]
+    public IActionResult InmueblesSuspendidos()
+    {
+        RepositorioInmueble rinmu = new RepositorioInmueble();
+        var lista = rinmu.obtenerInmueblesSuspendidos();
+        validaDisponibles(lista);
+
+        return View(lista);
+    }
+
+    private void validaDisponibles(IList<Inmueble> lista)
+    {
+        foreach(Inmueble inmu in lista)
+        {
+            validaDisponible(inmu);
+        }
+    }
+
+    public void validaDisponible(Inmueble inmu)
+    {
+        if(inmu.Disponible == 0)
+        {
+           inmu.Disp = "Disponible"; 
+        }
+        else{
+                inmu.Disp = "Suspendido";
+            }
+    }
+
+    private void disp(Inmueble inmu)
+    {
+        if(inmu.Disp == "Disponible")
+        {
+            inmu.Disponible = 0;
+        }
+        else {
+            inmu.Disponible = 1;
+        }
+    }
+
+    private void cargarLista(IList<String> listaD, IList<String> listaU)
+    {
+        listaD.Add("Suspendido");
+        listaD.Add("Disponible");
+        listaU.Add("Residencial");
+        listaU.Add("Comercial");
     }
 }

@@ -38,10 +38,13 @@
                 <span asp-validation-for="Longitud" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Uso" class="control-label"></label>
-                <input asp-for="Uso" class="form-control" />
-                <span asp-validation-for="Uso" class="text-danger"></span>
-            </div>
+				<label class="control-label">Uso</label>
+				<select class="form-control" name="Uso">
+					<option value="Residencial">Residencial</option>
+                    <option value="Comercial">Comercial</option>
+				</select>
+				<span asp-validation-for="Uso" class="text-danger"></span>
+			</div>
             <div class="form-group">
                 <label asp-for="PropietarioId" class="control-label"></label>
                 <input asp-for="PropietarioId" class="form-control" />
@@ -57,6 +60,14 @@
                 <input asp-for="TipoId" class="form-control" />
                 <span asp-validation-for="TipoId" class="text-danger"></span>
             </div>
+            <div class="form-group">
+				<label class="control-label">Disponible</label>
+				<select class="form-control" name="Disponible">
+					<option value="Disponible">Disponible</option>
+                    <option value="No Disponible">Disponible</option>
+				</select>
+				<span asp-validation-for="Disponible" class="text-danger"></span>
+			</div>
             <div class="form-group">
                 <input type="submit" value="Guardar" class="btn btn-primary" />
             </div>

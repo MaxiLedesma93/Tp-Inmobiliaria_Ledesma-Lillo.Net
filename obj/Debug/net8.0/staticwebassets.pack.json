@@ -5,7 +5,11 @@
       "PackagePath": "staticwebassets\\Tp-Inmobiliaria_Ledesma-Lillo.Net.bundle.scp.css"
     },
     {
+<<<<<<< Updated upstream
       "Id": "C:\\Users\\maxim\\OneDrive\\Documents\\GitHub\\Tp-Inmobiliaria.Net\\wwwroot\\css\\site.css",
+=======
+      "Id": "C:\\Users\\Usuario\\Documents\\GitHub\\Tp-Inmobiliaria_Ledesma-Lillo.Net\\wwwroot\\css\\site.css",
+>>>>>>> Stashed changes
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {

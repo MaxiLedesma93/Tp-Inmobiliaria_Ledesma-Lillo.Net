@@ -62,7 +62,15 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5tdWVibGVcR3VhcmRhci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+<<<<<<< Updated upstream
 [C:/Users/maxim/OneDrive/Documents/GitHub/Tp-Inmobiliaria.Net/Views/Inmueble/Listado.cshtml]
+=======
+[C:/Users/Usuario/Documents/GitHub/Tp-Inmobiliaria_Ledesma-Lillo.Net/Views/Inmueble/InmueblesSuspendidos.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5tdWVibGVcSW5tdWVibGVzU3VzcGVuZGlkb3MuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Usuario/Documents/GitHub/Tp-Inmobiliaria_Ledesma-Lillo.Net/Views/Inmueble/Listado.cshtml]
+>>>>>>> Stashed changes
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5tdWVibGVcTGlzdGFkby5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
