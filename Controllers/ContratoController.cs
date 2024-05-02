@@ -1,4 +1,6 @@
+using System.Collections;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Tp_Inmobiliaria_Ledesma_Lillo.Models;
 using Tp_Inmobiliaria_Ledesma_Lillo.Net.Controllers;
@@ -16,19 +18,62 @@ public class ContratoController : Controller
     }
 
     [Authorize]
-    public IActionResult Listado()
+    public IActionResult Listado(int? dias, DateTime? fecInf, DateTime? fecSup, string? dir)
     {
         try
-        {
+        {   ViewBag.dias = dias;
             RepositorioContrato rc = new RepositorioContrato();
-            var lista = rc.ObtenerContratos();
-            ViewBag.id = TempData["id"];
-            // TempData es para pasar datos entre acciones
-				// ViewBag/Data es para pasar datos del controlador a la vista
-				// Si viene alguno valor por el tempdata, lo paso al viewdata/viewbag
-				if (TempData.ContainsKey("Mensaje"))
-					ViewBag.Mensaje = TempData["Mensaje"];
-            return View(lista);
+            RepositorioInmueble ri = new RepositorioInmueble();
+            IList<Contrato> filtrados = new List<Contrato>();
+            var lista=rc.ObtenerContratos();
+            var listaInm = ri.ObtenerInmuebles();
+            ViewBag.Inmuebles = listaInm;
+            if(dir!=null){
+                foreach (var item in lista)
+                {
+                    if(item.Inmueble.Direccion==dir){
+                       filtrados.Add(item);
+                    }
+                }
+                return View(filtrados);
+                
+            }
+            
+            if(fecInf!=null&&fecSup!=null){
+               
+                
+                foreach (var item in lista)
+                {
+                    if(item.FecInicio>=fecInf && item.FecFin<=fecSup){
+                       filtrados.Add(item);
+                    }
+                }
+                return View(filtrados);
+                
+
+            }
+            if(dias==0||dias==null){
+               
+                ViewBag.id = TempData["id"];
+                // TempData es para pasar datos entre acciones
+                    // ViewBag/Data es para pasar datos del controlador a la vista
+                    // Si viene alguno valor por el tempdata, lo paso al viewdata/viewbag
+                    if (TempData.ContainsKey("Mensaje"))
+                        ViewBag.Mensaje = TempData["Mensaje"];
+                return View(lista);
+            }
+            else{
+                       
+                DateTime fechLim = DateTime.Today.AddDays((double)dias);
+                foreach (var item in lista)
+                {
+                    if(item.FecFin<fechLim){
+                       filtrados.Add(item);
+                    }
+                }
+                return View(filtrados);
+            }
+            
         }
         catch(Exception ex)
         {

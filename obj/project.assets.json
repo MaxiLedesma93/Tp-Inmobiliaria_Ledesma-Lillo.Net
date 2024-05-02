@@ -1786,19 +1786,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Usuario\\.nuget\\packages\\": {}
+    "C:\\Users\\maxim\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Usuario\\Documents\\GitHub\\Tp-Inmobiliaria_Ledesma-Lillo.Net\\Tp-Inmobiliaria_Ledesma-Lillo.Net.csproj",
+      "projectUniqueName": "C:\\Users\\maxim\\OneDrive\\Documents\\GitHub\\Tp-Inmobiliaria.Net\\Tp-Inmobiliaria_Ledesma-Lillo.Net.csproj",
       "projectName": "Tp-Inmobiliaria_Ledesma-Lillo.Net",
-      "projectPath": "C:\\Users\\Usuario\\Documents\\GitHub\\Tp-Inmobiliaria_Ledesma-Lillo.Net\\Tp-Inmobiliaria_Ledesma-Lillo.Net.csproj",
-      "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Usuario\\Documents\\GitHub\\Tp-Inmobiliaria_Ledesma-Lillo.Net\\obj\\",
+      "projectPath": "C:\\Users\\maxim\\OneDrive\\Documents\\GitHub\\Tp-Inmobiliaria.Net\\Tp-Inmobiliaria_Ledesma-Lillo.Net.csproj",
+      "packagesPath": "C:\\Users\\maxim\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\maxim\\OneDrive\\Documents\\GitHub\\Tp-Inmobiliaria.Net\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\maxim\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
