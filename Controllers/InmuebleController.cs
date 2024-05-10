@@ -8,9 +8,10 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers;
 public class InmuebleController : Controller 
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly IRepositorioPropietario repoPropietario;
 
-    public InmuebleController(ILogger<HomeController> logger)
-    {
+    public InmuebleController(IRepositorioPropietario repoPropietrario, ILogger<HomeController> logger)
+    {   this.repoPropietario = repoPropietario;
         _logger = logger;
     }
 
@@ -50,8 +51,8 @@ public class InmuebleController : Controller
                 IList<String> listaUso = new List<String>();
                 cargarLista(listaDisponibilidad, listaUso);
                 
-                RepositorioPropietario repoPropietario = new RepositorioPropietario();
-                ViewBag.Propietarios = repoPropietario.ObtenerPropietarios();
+               
+                ViewBag.Propietarios = repoPropietario.ObtenerTodos();
                 RepositorioTipo rt = new RepositorioTipo();
                 ViewBag.Tipos = rt.ObtenerTiposInmuebles();
                 RepositorioInmueble rinmu = new RepositorioInmueble();
@@ -78,8 +79,8 @@ public class InmuebleController : Controller
 			{
 				RepositorioTipo rt = new RepositorioTipo();
                 ViewBag.Tipos = rt.ObtenerTiposInmuebles();
-                RepositorioPropietario repoPropietario = new RepositorioPropietario();
-                ViewBag.Propietarios = repoPropietario.ObtenerPropietarios();
+              
+                ViewBag.Propietarios = repoPropietario.ObtenerTodos();
                 return View();
 			}
 			catch (Exception ex)

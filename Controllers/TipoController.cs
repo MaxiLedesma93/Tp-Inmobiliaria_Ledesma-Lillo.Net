@@ -11,8 +11,13 @@ public class TipoController : Controller
     private readonly ILogger<HomeController> _logger;
     
 
-    public TipoController(ILogger<HomeController> logger)
-    {
+    private readonly IConfiguration config;
+    private readonly IRepositorioTipo repo;
+    
+
+    public TipoController(IRepositorioTipo repo, ILogger<HomeController> logger, IConfiguration config)
+    {   this.config = config;
+        this.repo  =repo;
         _logger = logger;
     }
     
@@ -21,8 +26,8 @@ public class TipoController : Controller
     {
         try
         {
-            RepositorioTipo rt = new RepositorioTipo();
-            var lista = rt.ObtenerTiposInmuebles();
+            
+            var lista = repo.ObtenerTodos();
             ViewBag.id = TempData["id"];
             // TempData es para pasar datos entre acciones
 				// ViewBag/Data es para pasar datos del controlador a la vista
@@ -53,10 +58,10 @@ public class TipoController : Controller
     [Authorize(Policy = "Administrador")]
     public IActionResult Eliminar(int id)
     {
-        RepositorioTipo rp = new RepositorioTipo();
+        
         try
         {
-            rp.EliminaTipo(id);
+            repo.Baja(id);
             TempData["Mensaje"] = "Eliminación realizada correctamente";
             return RedirectToAction(nameof(Listado));
         }
@@ -69,12 +74,12 @@ public class TipoController : Controller
     [Authorize]
     public IActionResult Guardar(Tipo tipo)
     {
-        RepositorioTipo rp = new RepositorioTipo();
+        
         try
         {
            if(ModelState.IsValid)
            {
-                rp.AltaTipo(tipo);
+                repo.Alta(tipo);
                 TempData["id"] = tipo.IdTipo; 
            }
            else 
@@ -92,9 +97,9 @@ public class TipoController : Controller
     [Authorize]
     public IActionResult Detalle(int id)
     {
-        RepositorioTipo rt = new RepositorioTipo();
+       
 
-        Tipo? tipo = rt.ObtenerTipo(id);
+        Tipo? tipo = repo.ObtenerPorId(id);
 
         return View(tipo);
     }

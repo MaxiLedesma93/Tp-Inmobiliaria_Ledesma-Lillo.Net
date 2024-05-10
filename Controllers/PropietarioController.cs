@@ -9,10 +9,13 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers;
 public class PropietarioController : Controller 
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly IConfiguration config;
+    private readonly IRepositorioPropietario repo;
     
 
-    public PropietarioController(ILogger<HomeController> logger)
-    {
+    public PropietarioController(IRepositorioPropietario repo, ILogger<HomeController> logger, IConfiguration config)
+    {   this.config = config;
+        this.repo  =repo;
         _logger = logger;
     }
 
@@ -21,8 +24,8 @@ public class PropietarioController : Controller
     {
         try
         {
-            RepositorioPropietario rp = new RepositorioPropietario();
-            var lista = rp.ObtenerPropietarios();
+            
+            var lista = repo.ObtenerTodos();
             ViewBag.id = TempData["id"];
             // TempData es para pasar datos entre acciones
 				// ViewBag/Data es para pasar datos del controlador a la vista
@@ -44,8 +47,8 @@ public class PropietarioController : Controller
         {
             if(id > 0)
             {
-                RepositorioPropietario rp = new RepositorioPropietario();
-                var propietario = rp.ObtenerPropietario(id);
+                
+                var propietario = repo.ObtenerPorId(id);
                 TempData["Mensaje"] = "Datos guardados correctamente";
                 return View(propietario);
             }
@@ -74,17 +77,17 @@ public class PropietarioController : Controller
     [Authorize]
     public IActionResult Guardar(Propietario propietario)
     {
-        RepositorioPropietario rp = new RepositorioPropietario();
+       
         try
         {
            if(ModelState.IsValid)
            {
                 if(propietario.IdPropietario > 0)
                 {
-                    rp.ModificaPropietario(propietario);
+                    repo.Modificacion(propietario);
                 }
                 else{
-                    rp.AltaPropietario(propietario);
+                    repo.Alta(propietario);
                     TempData["id"] = propietario.IdPropietario; 
                 }
            }
@@ -104,10 +107,10 @@ public class PropietarioController : Controller
     [Authorize(Policy = "Administrador")]
     public IActionResult Eliminar(int id)
     {
-        RepositorioPropietario rp = new RepositorioPropietario();
+        
         try
         {
-            rp.EliminaPersona(id);
+            repo.Baja(id);
             TempData["Mensaje"] = "Eliminación realizada correctamente";
             return RedirectToAction(nameof(Listado));
         }
@@ -120,8 +123,8 @@ public class PropietarioController : Controller
     [Authorize]
     public IActionResult Detalle(int id)
     {
-        RepositorioPropietario rp = new RepositorioPropietario();
-        Propietario? p = rp.ObtenerPropietario(id);
+        
+        Propietario? p = repo.ObtenerPorId(id);
         return View(p);
     }
 }

@@ -2,16 +2,17 @@ using MySql.Data.MySqlClient;
 
 namespace Tp_Inmobiliaria_Ledesma_Lillo.Models;
 
-public class RepositorioTipo
+public class RepositorioTipo : RepositorioBase, IRepositorioTipo
+
+   
 {
-    protected readonly string connectionString = "Server=localhost;Database=ledesmalillo;User=root;Password=;";
+    
+		public RepositorioTipo(IConfiguration configuration) : base(configuration)
+		{
+			
+		}
 
-    public RepositorioTipo()
-    {
-
-    }
-
-    public IList<Tipo> ObtenerTiposInmuebles()
+    public IList<Tipo> ObtenerTodos()
 		{
 			var tipos = new List<Tipo>();
 
@@ -37,7 +38,7 @@ public class RepositorioTipo
         }
 		}
 
-		public Tipo? ObtenerTipo(int id)
+		public Tipo? ObtenerPorId(int id)
 		{
 			Tipo? tipo = null;
 			
@@ -66,7 +67,7 @@ public class RepositorioTipo
         }
 		}
 
-		public int AltaTipo(Tipo tipo)
+		public int Alta(Tipo tipo)
 		{
 			int id = 0;
 		using(var connection = new MySqlConnection(connectionString))
@@ -87,7 +88,7 @@ public class RepositorioTipo
 		return id;
 		}
 
-        public int EliminaTipo(int id)
+        public int Baja(int id)
 	{
 		using(var connection = new MySqlConnection(connectionString))
 		{
@@ -103,4 +104,26 @@ public class RepositorioTipo
 		}
 		return 0;
 	}
+		public int Modificacion(Tipo tipo)
+		{
+			int res = -1;
+			using(var connection = new MySqlConnection(connectionString))
+			{
+				var sql = @$"UPDATE tipos
+					SET {nameof(Tipo.Descripcion)} = @{nameof(Tipo.Descripcion)},
+					
+				
+					WHERE {nameof(Tipo.IdTipo)} = @{nameof(Tipo.IdTipo)}";
+				using(var command = new MySqlCommand(sql, connection))
+				{
+					
+					command.Parameters.AddWithValue($"@{nameof(Tipo.IdTipo)}", tipo.IdTipo);
+					
+					connection.Open();
+					command.ExecuteNonQuery();
+					connection.Close();
+				}
+			}
+			return res;
+		}
 }

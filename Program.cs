@@ -5,6 +5,7 @@ using Mysqlx.Crud;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+using Tp_Inmobiliaria_Ledesma_Lillo.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,9 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Administrador", policy =>
      policy.RequireRole("Administrador"));
 });
+
+builder.Services.AddTransient<IRepositorioPropietario, RepositorioPropietario>();
+
 
 
 

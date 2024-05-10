@@ -11,7 +11,7 @@ public class RepositorioContrato
     {
 
     }
-    public int AltaContrato(Contrato c)
+    public int Alta(Contrato c)
     {  
         int id = -1;
         using (var connection = new MySqlConnection(connectionString))
@@ -49,7 +49,7 @@ public class RepositorioContrato
         return id;
     }
 
-    public int ModificaContrato(Contrato c)
+    public int Modifica(Contrato c)
     {
         using (var connection = new MySqlConnection(connectionString))
         {
@@ -86,7 +86,7 @@ public class RepositorioContrato
         return 0;
     }
 
-    public int EliminaContrato(int id)
+    public int Baja(int id)
     {
 
         using (var connection = new MySqlConnection(connectionString))
@@ -105,7 +105,7 @@ public class RepositorioContrato
 
     }
 
-    public Contrato? ObtenerContrato(int id)
+    public Contrato? ObtenerPorId(int id)
     {
         Contrato? contrato = null;
         using (var connection = new MySqlConnection(connectionString))
@@ -158,7 +158,7 @@ public class RepositorioContrato
         return contrato;
     }
 
-    public IList<Contrato> ObtenerContratos(){
+    public IList<Contrato> ObtenerTodos(){
         IList<Contrato> contratos = new List<Contrato>();
 
         using (var connection = new MySqlConnection(connectionString)){
