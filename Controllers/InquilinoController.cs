@@ -9,10 +9,15 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers;
 public class InquilinoController : Controller 
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly IRepositorioInquilino repo;
+    private readonly IConfiguration config;
+
     
 
-    public InquilinoController(ILogger<HomeController> logger)
-    {
+    public InquilinoController(ILogger<HomeController> logger, IRepositorioInquilino repo,
+    		 IConfiguration config)
+    {   this.config = config;
+        this.repo = repo;
         _logger = logger;
     }
 
@@ -21,8 +26,8 @@ public class InquilinoController : Controller
     {
         try
         {
-            RepositorioInquilino rp = new RepositorioInquilino();
-            var lista = rp.ObtenerInquilinos();
+           
+            var lista = repo.ObtenerTodos();
             ViewBag.id = TempData["id"];
             return View(lista);
         }
@@ -39,8 +44,8 @@ public class InquilinoController : Controller
         {
             if(id > 0)
             {
-                RepositorioInquilino ri = new RepositorioInquilino();
-                var inquilino = ri.ObtenerInquilino(id);
+              
+                var inquilino = repo.ObtenerPorId(id);
                 return View(inquilino);
             }
             else
@@ -68,17 +73,17 @@ public class InquilinoController : Controller
     [Authorize]
     public IActionResult Guardar(Inquilino inquilino)
     {
-        RepositorioInquilino ri = new RepositorioInquilino();
+        
         try
         {
            if(ModelState.IsValid)
            {
                 if(inquilino.IdInquilino > 0)
                 {
-                    ri.ModificaInquilino(inquilino);
+                    repo.Modificacion(inquilino);
                 }
                 else{
-                    ri.AltaInquilino(inquilino);
+                    repo.Alta(inquilino);
                     TempData["id"] = inquilino.IdInquilino; 
                 }
            }
@@ -98,10 +103,10 @@ public class InquilinoController : Controller
     [Authorize(Policy = "Administrador")]
     public IActionResult Eliminar(int id)
     {
-        RepositorioInquilino rp = new RepositorioInquilino();
+        
         try
         {
-            rp.EliminaInquilino(id);
+            repo.Baja(id);
             TempData["Mensaje"] = "Eliminación realizada correctamente";
             return RedirectToAction(nameof(Listado));
         }
@@ -114,8 +119,8 @@ public class InquilinoController : Controller
     [Authorize]
     public IActionResult Detalle(int id)
     {
-        RepositorioInquilino rinq = new RepositorioInquilino();
-        Inquilino? inq = rinq.ObtenerInquilino(id);
+       
+        Inquilino? inq = repo.ObtenerPorId(id);
         return View(inq);
     }
 }

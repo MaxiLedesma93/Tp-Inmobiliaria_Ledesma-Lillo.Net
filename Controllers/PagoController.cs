@@ -8,10 +8,18 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers;
 public class PagoController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly IRepositorioPago repo;
+    private readonly IRepositorioContrato repoContra;
+
+    private readonly IConfiguration config;
+
     
 
-    public PagoController(ILogger<HomeController> logger)
-    {
+    public PagoController(ILogger<HomeController> logger, IRepositorioPago repo,
+     IRepositorioContrato repoContra, IConfiguration config)
+    {   this.repo = repo;
+        this.config = config;
+        this.repoContra = repoContra;
         _logger = logger;
     }
     [Authorize]
@@ -19,8 +27,7 @@ public class PagoController : Controller
     {
         try
         {
-            RepositorioPago rp = new RepositorioPago();
-            var lista = rp.ObtenerTodosPagos();
+            var lista = repo.ObtenerTodos();
             if(lista.Count != 0)
             { validaEstado(lista); }
             
@@ -42,12 +49,11 @@ public class PagoController : Controller
     [Authorize]
     public IActionResult Crear(int id)
 	{
-			RepositorioPago rp = new RepositorioPago();
-            RepositorioContrato rc = new RepositorioContrato();
+           
             try
 			{
-                Contrato c = rc.ObtenerContrato(id);
-                IList<Pago> lista = rp.ObtenerPagosPorContrato(id);
+                Contrato? c = repoContra.ObtenerPorId(id);
+                IList<Pago> lista = repo.ObtenerPagosPorContrato(id);
                 ViewBag.tamanio = lista.Count + 1;
                 ViewBag.monto = c.Monto;
                 ViewBag.idContrato = c.IdContrato;
@@ -63,11 +69,11 @@ public class PagoController : Controller
     [Authorize(Policy = "Administrador")]
     public IActionResult Eliminar(int id)
     {
-        RepositorioPago rp = new RepositorioPago();
+       
         try
         {
-            rp.EliminaPago(id);
-            Pago p = rp.ObtenerPago(id);
+            repo.Baja(id);
+            Pago p = repo.ObtenerPorId(id);
             p.Activo = "Inactivo";
             TempData["Mensaje"] = "Eliminación realizada correctamente";
             return RedirectToAction(nameof(Listado));
@@ -82,18 +88,17 @@ public class PagoController : Controller
     [Authorize]
     public IActionResult Guardar(Pago pago)
     {
-        RepositorioPago rp = new RepositorioPago();
         try
         {
            if(ModelState.IsValid)
            {
                 if(pago.IdPago > 0)
                 {
-                    rp.ModificaPago(pago);
+                    repo.Modificacion(pago);
                 }
                 else
                 {
-                    rp.AltaPago(pago);
+                    repo.Alta(pago);
                     pago.Est = 0;
                     TempData["id"] = pago.IdPago;
                 }
@@ -117,8 +122,8 @@ public class PagoController : Controller
         {
             if(id > 0)
             {
-                RepositorioPago rp = new RepositorioPago();
-                var pago = rp.ObtenerPago(id);
+                
+                var pago = repo.ObtenerPorId(id);
                 pago.FechaPago = DateTime.Today;
                 TempData["Mensaje"] = "Datos guardados correctamente";
                 return View(pago);
@@ -135,9 +140,9 @@ public class PagoController : Controller
     [Authorize]
     public IActionResult Detalle(int id)
     {
-        RepositorioPago rp = new RepositorioPago();
+        
 
-        Pago? pago = rp.ObtenerPago(id);
+        Pago? pago = repo.ObtenerPorId(id);
 
         return View(pago);
     }
@@ -145,8 +150,8 @@ public class PagoController : Controller
     [Authorize]
     public IActionResult PagosEliminados()
     {
-        RepositorioPago rp = new RepositorioPago();
-        var lista = rp.ObtenerPagosEliminados();
+        
+        var lista = repo.ObtenerPagosEliminados();
         validaEstado(lista);
         if(lista.Count == 0)
         {

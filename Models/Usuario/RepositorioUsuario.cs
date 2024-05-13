@@ -4,15 +4,14 @@ using MySql.Data.MySqlClient;
 
 namespace Tp_Inmobiliaria_Ledesma_Lillo.Models;
 
-public class RepositorioUsuario
-{
-	protected readonly string connectionString = "Server=localhost;Database=ledesmalillo;User=root;Password=;";
-	public RepositorioUsuario()
+public class RepositorioUsuario: RepositorioBase, IRepositorioUsuario
+{	
+	public RepositorioUsuario(IConfiguration configuration) : base(configuration)
 	{
 
 	}
 
-	public IList<Usuario> ObtenerUsuarios()
+	public IList<Usuario> ObtenerTodos()
 	{
 		var usuarios = new List<Usuario>();
 
@@ -47,7 +46,7 @@ public class RepositorioUsuario
 		}
 	}
 
-	public Usuario? ObtenerUsuario(int id)
+	public Usuario? ObtenerPorId(int id)
 	{
 		Usuario? usuario = null;
 
@@ -120,7 +119,7 @@ public class RepositorioUsuario
 			return usuario;
 		}
 	}
-	public int AltaUsuario(Usuario usuario)
+	public int Alta(Usuario usuario)
 	{
 		int id = 0;
 		using (var connection = new MySqlConnection(connectionString))
@@ -148,7 +147,7 @@ public class RepositorioUsuario
 		return id;
 	}
 
-	public int ModificaUsuario(Usuario usuario)
+	public int Modificacion(Usuario usuario)
 	{
 		using (var connection = new MySqlConnection(connectionString))
 		{
@@ -207,7 +206,7 @@ public class RepositorioUsuario
 		return 0;
 	}
 
-	public int EliminaUsuario(int id)
+	public int Baja(int id)
 	{
 		using (var connection = new MySqlConnection(connectionString))
 		{

@@ -2,16 +2,15 @@ using MySql.Data.MySqlClient;
 
 namespace Tp_Inmobiliaria_Ledesma_Lillo.Models;
 
-public class RepositorioPago
+public class RepositorioPago : RepositorioBase, IRepositorioPago
 {
-    protected readonly string connectionString = "Server=localhost;Database=ledesmalillo;User=root;Password=;";
 
-    public RepositorioPago()
+    public RepositorioPago(IConfiguration configuration) : base(configuration)
     {
 
     }
 
-    public IList<Pago> ObtenerTodosPagos()
+    public IList<Pago> ObtenerTodos()
     {
 			var pagos = new List<Pago>();
 
@@ -57,7 +56,7 @@ public class RepositorioPago
             }
 	}
 
-    public Pago ObtenerPago(int id)
+    public Pago ObtenerPorId(int id)
     {
         Pago? pago = null;
 
@@ -138,7 +137,7 @@ public class RepositorioPago
             }
 	}
 
-    public int AltaPago(Pago pago)
+    public int Alta(Pago pago)
 		{
 			int id = 0;
 		using(var connection = new MySqlConnection(connectionString))
@@ -168,7 +167,7 @@ public class RepositorioPago
 		return id;
 	}
 
-    public int ModificaPago(Pago pago)
+    public int Modificacion(Pago pago)
 	{
         int res = -1;
 		using(var connection = new MySqlConnection(connectionString))
@@ -199,7 +198,7 @@ public class RepositorioPago
 		return res;
 	}
 
-    public int EliminaPago(int id)
+    public int Baja(int id)
 	{
 		using(var connection = new MySqlConnection(connectionString))
 		{

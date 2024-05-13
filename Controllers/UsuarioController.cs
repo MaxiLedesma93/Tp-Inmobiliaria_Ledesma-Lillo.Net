@@ -14,26 +14,24 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 {
 	public class UsuarioController : Controller
 	{
-        private readonly IConfiguration configuration;
-		private readonly IWebHostEnvironment environment;
-		private readonly RepositorioUsuario repositorio;
-		
-         
+      	private readonly IWebHostEnvironment environment;
 		private readonly ILogger<HomeController> _logger;
-    
+		private readonly IRepositorioUsuario repo;
+		private readonly IConfiguration config;
 
-    public UsuarioController( ILogger<HomeController> logger,IWebHostEnvironment environment, IConfiguration configuration)
-    {	this.environment = environment;
-		this.configuration = configuration;
-		
+    public UsuarioController( ILogger<HomeController> logger,IWebHostEnvironment environment,
+	 IConfiguration config, IRepositorioUsuario repo)
+    {	
+		this.repo = repo;
+		this.environment = environment;
+		this.config = config;
         _logger = logger;
     }
 		// GET: Usuarios
 		[Authorize(Policy = "Administrador")]
 		public ActionResult Listado()
 		{
-			RepositorioUsuario repositorio = new RepositorioUsuario();
-			var usuarios1 = repositorio.ObtenerUsuarios();
+			var usuarios1 = repo.ObtenerTodos();
 			return View(usuarios1);
 		}
 
@@ -41,7 +39,7 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 		[Authorize(Policy = "Administrador")]
 		public ActionResult Details(int id)
 		{
-			var e = repositorio.ObtenerUsuario(id);
+			var e = repo.ObtenerPorId(id);
 			return View(e);
 		}
 
@@ -58,59 +56,53 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 		[ValidateAntiForgeryToken]
 		[Authorize(Policy = "Administrador")]
 		public ActionResult Crear(Usuario usuario)
-    {
-        RepositorioUsuario ru = new RepositorioUsuario();
-        try
-        {   
-			if(!ModelState.IsValid)
+    	{
+			try
 			{   
-				return View();
-			}
-			else{
-				string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-							password: usuario.Clave,
-							salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
-							prf: KeyDerivationPrf.HMACSHA1,
-							iterationCount: 1000,
-							numBytesRequested: 256 / 8));
-				usuario.Clave = hashed;
-				
-				ru.AltaUsuario(usuario);
-				
-				if (usuario.AvatarFile != null && usuario.IdUsuario >0)
-				{
-					string wwwPath = environment.WebRootPath;
-					string path = Path.Combine(wwwPath, "Uploads");
-					if (!Directory.Exists(path))
-					{
-						Directory.CreateDirectory(path);
-					}
-					//Path.GetFileName(u.AvatarFile.FileName);//este nombre se puede repetir
-					string fileName = "avatar_" + usuario.IdUsuario + Path.GetExtension(usuario.AvatarFile.FileName);
-					string pathCompleto = Path.Combine(path, fileName);
-					usuario.Avatar = Path.Combine("/Uploads", fileName);
-					
-					// Esta operación guarda la foto en memoria en la ruta que necesitamos
-					using (FileStream stream = new FileStream(pathCompleto, FileMode.Create))
-					{
-						usuario.AvatarFile.CopyTo(stream);
-					}
-					
-					ru.ModificaUsuario(usuario);
+				if(!ModelState.IsValid)
+				{   
+					return View();
 				}
-				
-				
-				TempData["id"] = usuario.IdUsuario; 
+				else{
+					
+					usuario.Clave = Hashear(usuario.Clave);
+					
+					repo.Alta(usuario);
+					
+					if (usuario.AvatarFile != null && usuario.IdUsuario >0)
+					{
+						string wwwPath = environment.WebRootPath;
+						string path = Path.Combine(wwwPath, "Uploads");
+						if (!Directory.Exists(path))
+						{
+							Directory.CreateDirectory(path);
+						}
+						//Path.GetFileName(u.AvatarFile.FileName);//este nombre se puede repetir
+						string fileName = "avatar_" + usuario.IdUsuario + Path.GetExtension(usuario.AvatarFile.FileName);
+						string pathCompleto = Path.Combine(path, fileName);
+						usuario.Avatar = Path.Combine("/Uploads", fileName);
+						
+						// Esta operación guarda la foto en memoria en la ruta que necesitamos
+						using (FileStream stream = new FileStream(pathCompleto, FileMode.Create))
+						{
+							usuario.AvatarFile.CopyTo(stream);
+						}
+						
+						repo.Modificacion(usuario);
+					}
+					
+					
+					TempData["id"] = usuario.IdUsuario; 
+				}
+			
+				return RedirectToAction(nameof(Listado));
 			}
-		
-			return RedirectToAction(nameof(Listado));
-        }
-        catch(Exception ex)
-        {
-            return Json(new { Error = ex.Message });
-        }
+			catch(Exception ex)
+			{
+				return Json(new { Error = ex.Message });
+			}
 
-    }
+		}
 		
 		// GET: Usuario/Editar/5
 		[Authorize]
@@ -118,8 +110,8 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 		public ActionResult Perfil()
 		{
 			ViewData["Title"] = "Mi perfil";
-			RepositorioUsuario ru = new RepositorioUsuario();
-			Usuario usuario = ru.ObtenerPorEmail(User.Identity.Name);
+			
+			Usuario usuario = repo.ObtenerPorEmail(User.Identity.Name);
 			return View("Perfil", usuario);
 		}
 
@@ -127,8 +119,7 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 		[HttpPost]
 		public ActionResult Perfil(Usuario usuario){
 			ViewData["Title"] = "Mi perfil";
-			RepositorioUsuario ru = new RepositorioUsuario();
-			Usuario u = ru.ObtenerPorEmail(User.Identity.Name);
+			Usuario u = repo.ObtenerPorEmail(User.Identity.Name);
 			if (usuario.AvatarFile != null && u.IdUsuario >0)
 			{
 				string wwwPath = environment.WebRootPath;
@@ -150,7 +141,7 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 				}
 				
 				
-				ru.ModificaUsuario(u);
+				repo.Modificacion(u);
 				TempData["mensaje"] = "datos guardados correctamente.";
 			}
 
@@ -162,13 +153,12 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 		public ActionResult borrarAvatar()
 		{	var vista = nameof(Perfil);
 			ViewData["Title"] = "Mi perfil";
-			RepositorioUsuario ru = new RepositorioUsuario();
-			var user = ru.ObtenerPorEmail(User.Identity.Name);
+			var user = repo.ObtenerPorEmail(User.Identity.Name);
 			user.Avatar=" ";
 			var ruta = Path.Combine(environment.WebRootPath, "Uploads", $"avatar_{user.IdUsuario}" + Path.GetExtension(user.Avatar));
 				if (System.IO.File.Exists(ruta))
 					System.IO.File.Delete(ruta);
-			ru.ModificaUsuario(user);
+			repo.Modificacion(user);
 			return View(vista, user);
 		}
 		
@@ -176,8 +166,7 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 		public ActionResult EditarPerfil()
 		{
 			ViewData["Title"] = "Mi perfil";
-			RepositorioUsuario ru = new RepositorioUsuario();
-			Usuario usuario = ru.ObtenerPorEmail(User.Identity.Name);
+			Usuario usuario = repo.ObtenerPorEmail(User.Identity.Name);
 			return View("EditarPerfil", usuario);
 		}
 
@@ -185,8 +174,7 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 		[HttpPost]
 		[Authorize]
 		public ActionResult Avatar(Usuario usuario){
-			RepositorioUsuario ru = new RepositorioUsuario();
-			Usuario u = ru.ObtenerUsuario(usuario.IdUsuario);
+			Usuario u = repo.ObtenerPorId(usuario.IdUsuario);
 
 			if (usuario.AvatarFile != null && u.IdUsuario >0)
 			{
@@ -209,7 +197,7 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 				}
 				
 				
-				ru.ModificaUsuario(u);
+				repo.Modificacion(u);
 				TempData["mensaje"] = "datos guardados correctamente.";
 			}
 			return RedirectToAction("Perfil",usuario);
@@ -221,8 +209,7 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 
 			var vista = nameof(Perfil);
 			
-			RepositorioUsuario ru = new RepositorioUsuario();
-			Usuario u = ru.ObtenerPorEmail(User.Identity.Name);
+			Usuario u = repo.ObtenerPorEmail(User.Identity.Name);
 			u.Nombre = usuario.Nombre;
 			u.Apellido = usuario.Apellido;
 			u.Email = usuario.Email;
@@ -249,12 +236,12 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 				}
 				
 				
-				ru.ModificaUsuario(u);
+				repo.Modificacion(u);
 				TempData["mensaje"] = "datos guardados correctamente.";
 				
 			}
 			
-			ru.ModificaUsuario(u);
+			repo.Modificacion(u);
 			return RedirectToAction(vista,u);
 		}
 
@@ -263,33 +250,15 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 		public ActionResult CambiarPass(Usuario usuario){
 			var vista = nameof(Perfil);
 			ViewData["Title"] = "Mi perfil";
-			RepositorioUsuario ru = new RepositorioUsuario();
-			var user = ru.ObtenerPorEmail(User.Identity.Name);
-			string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-							password: usuario.Clave,
-							salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
-							prf: KeyDerivationPrf.HMACSHA1,
-							iterationCount: 1000,
-							numBytesRequested: 256 / 8));
+			var user = repo.ObtenerPorEmail(User.Identity.Name);
+			string hashed = Hashear(usuario.Clave);
 			
 			if(user.Clave==hashed){
-				 hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-							password: usuario.clnueva,
-							salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
-							prf: KeyDerivationPrf.HMACSHA1,
-							iterationCount: 1000,
-							numBytesRequested: 256 / 8));
-				
-				user.Clave= hashed;
-				ru.ModificaUsuario(user);
+				user.Clave = Hashear(usuario.clnueva);
+				repo.Modificacion(user);
 				usuario.clnueva=""; //borra la claven de texto plano.
 			}
-			
 			return View(vista, user);
-
-
-			
-
 		}
 
 
@@ -298,8 +267,7 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 		public ActionResult Editar(int id)
 		{
 			ViewData["Title"] = "Editar usuario";
-			RepositorioUsuario ru = new RepositorioUsuario();
-			Usuario u = ru.ObtenerUsuario(id);
+			Usuario u = repo.ObtenerPorId(id);
 			ViewBag.Roles = u.ObtenerRoles();
 			return View("Editar",u);
 		}
@@ -316,27 +284,20 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 				if (User.IsInRole("Empleado"))//no soy admin
 				{
 					vista = nameof(Perfil);//solo puedo ver mi perfil
-					var usuarioActual = repositorio.ObtenerPorEmail(User.Identity.Name);
+					var usuarioActual = repo.ObtenerPorEmail(User.Identity.Name);
 					if (usuarioActual.IdUsuario != id)//si no es admin, solo puede modificarse él mismo
 						return RedirectToAction("Home");
 				}
 				else{
 					Usuario u = new Usuario();
-					RepositorioUsuario ru = new RepositorioUsuario();
-					u=ru.ObtenerUsuario(id);
+					u=repo.ObtenerPorId(id);
 					u.Nombre = usuario.Nombre;
 					u.Apellido = usuario.Apellido;
 					u.Email = usuario.Email;
 					//Permite ingresar clave nueva por olvido del 
 					//empleado en caso de ser necesario el formulario no obliga el ingreso de la clave.
 					if(User.IsInRole("Administrador")&&usuario.Clave!=null){
-						string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-								password: usuario.Clave,
-								salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
-								prf: KeyDerivationPrf.HMACSHA1,
-								iterationCount: 1000,
-								numBytesRequested: 256 / 8));
-						u.Clave = hashed;
+						u.Clave = Hashear(usuario.Clave);
 					}
 					u.Rol = usuario.Rol;
 					if (usuario.AvatarFile != null && usuario.IdUsuario >0)
@@ -358,13 +319,11 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 							usuario.AvatarFile.CopyTo(stream);
 							stream.Dispose();
 						}
-						
-						
-						ru.ModificaUsuario(u);
+						repo.Modificacion(u);
 						TempData["mensaje"] = "datos guardados correctamente.";
 						return RedirectToAction(vista,u);
 					}
-					ru.ModificaUsuario(u);
+					repo.Modificacion(u);
 				}
 				
 				// TODO: Add update logic here
@@ -391,14 +350,11 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 		public ActionResult Eliminar(int id, Usuario usuario)
 		{
 			try
-
 			{
-				RepositorioUsuario ru = new RepositorioUsuario();
-
 				var ruta = Path.Combine(environment.WebRootPath, "Uploads", $"avatar_{id}" + Path.GetExtension(usuario.Avatar));
 				if (System.IO.File.Exists(ruta))
 					System.IO.File.Delete(ruta);
-				ru.EliminaUsuario(id);
+				repo.Baja(id);
 				return RedirectToAction("Listado");
 			}
 			catch
@@ -434,14 +390,8 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 				var  returnUrl = String.IsNullOrEmpty(TempData["returnUrl"] as string) ? "/Home" : TempData["returnUrl"].ToString();
 				if (ModelState.IsValid)
 				{
-					string hashed =  Convert.ToBase64String(KeyDerivation.Pbkdf2(
-							password: login.Clave,
-							salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
-							prf: KeyDerivationPrf.HMACSHA1,
-							iterationCount: 1000,
-							numBytesRequested: 256 / 8));
-					RepositorioUsuario rep = new RepositorioUsuario();
-					var e = rep.ObtenerPorEmail(login.Usuario);
+					string hashed =  Hashear(login.Clave);
+					var e = repo.ObtenerPorEmail(login.Usuario);
 					if (e == null || e.Clave != hashed)
 					{
 						ModelState.AddModelError("", "El email o la clave no son correctos");
@@ -487,5 +437,18 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers
 					CookieAuthenticationDefaults.AuthenticationScheme);
 			return RedirectToAction("Index", "Home");
 		}
+		
+		private string Hashear(string pal){
+			string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+							password: pal,
+							salt: System.Text.Encoding.ASCII.GetBytes(config["Salt"]),
+							prf: KeyDerivationPrf.HMACSHA1,
+							iterationCount: 1000,
+							numBytesRequested: 256 / 8));
+							
+			return hashed;
+		}
 	}
+		
+	
 }

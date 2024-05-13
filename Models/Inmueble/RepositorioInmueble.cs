@@ -2,15 +2,14 @@ using MySql.Data.MySqlClient;
 
 namespace Tp_Inmobiliaria_Ledesma_Lillo.Models;
 
-public class RepositorioInmueble
+public class RepositorioInmueble : RepositorioBase, IRepositorioInmueble
 {
-    protected readonly string connectionString = "Server=localhost;Database=ledesmalillo;User=root;Password=;";
-    public RepositorioInmueble()
+    public RepositorioInmueble(IConfiguration configuration) : base(configuration)
     {
 
     }
 
-    public IList<Inmueble> ObtenerInmuebles()
+    public IList<Inmueble> ObtenerTodos()
     {
         IList<Inmueble> inmuebles = new List<Inmueble>();
 
@@ -61,7 +60,7 @@ public class RepositorioInmueble
         }
     }
 
-    public Inmueble? ObtenerInmueble(int id)
+    public Inmueble? ObtenerPorId(int id)
     {
         Inmueble? inmueble = null;
 
@@ -115,7 +114,7 @@ public class RepositorioInmueble
         }
     }
 
-    public int AltaInmueble(Inmueble inmueble)
+    public int Alta(Inmueble inmueble)
     {
         int id = 0;
         using (var connection = new MySqlConnection(connectionString))
@@ -167,7 +166,7 @@ public class RepositorioInmueble
         return id;
     }
 
-    public int ModificaInmueble(Inmueble inmueble)
+    public int Modificacion(Inmueble inmueble)
     {
         using (var connection = new MySqlConnection(connectionString))
         {
@@ -207,7 +206,7 @@ public class RepositorioInmueble
     }
 
 
-    public int EliminaInmueble(int id)
+    public int Baja(int id)
     {
         using (var connection = new MySqlConnection(connectionString))
         {
@@ -274,4 +273,58 @@ public class RepositorioInmueble
             return inmuebles;
         }
     }
+
+    public IList<Inmueble>? buscarPorPropietario(int idPropietario){
+        IList<Inmueble> inmuebles = new List<Inmueble>();
+
+        using (var connection = new MySqlConnection(connectionString))
+        {
+            var sql = @$"SELECT {nameof(Inmueble.IdInmueble)},{nameof(Inmueble.PropietarioId)}, {nameof(Propietario.Nombre)}, {nameof(Propietario.Apellido)},
+                           {nameof(Inmueble.Ambientes)}, {nameof(Inmueble.Direccion)}, {nameof(Inmueble.Uso)}, {nameof(Inmueble.Latitud)},
+                           {nameof(Inmueble.Longitud)}, {nameof(Inmueble.Superficie)}, {nameof(Inmueble.Importe)}, {nameof(Inmueble.Disponible)},
+                           {nameof(Inmueble.TipoId)}, {nameof(Tipo.Descripcion)} 
+                           FROM inmuebles i INNER JOIN propietarios p ON i.PropietarioId = p.IdPropietario
+                           INNER JOIN tipos t ON i.TipoId = t.IdTipo
+                           WHERE {nameof(Inmueble.PropietarioId)} = @{nameof(Inmueble.PropietarioId)}";
+            using (var command = new MySqlCommand(sql, connection))
+            {
+                command.Parameters.AddWithValue($"@{nameof(Inmueble.PropietarioId)}", idPropietario);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+
+                    if (reader.Read())
+                    {
+                        inmuebles.Add( new Inmueble
+                        {
+                            IdInmueble = reader.GetInt32(nameof(Inmueble.IdInmueble)),
+                            PropietarioId = reader.GetInt32(nameof(Inmueble.PropietarioId)),
+                            Ambientes = reader.GetInt32(nameof(Inmueble.Ambientes)),
+                            Direccion = reader.GetString(nameof(Inmueble.Direccion)),
+                            Uso = reader.GetString(nameof(Inmueble.Uso)),
+                            Latitud = reader.GetDecimal(nameof(Inmueble.Latitud)),
+                            Longitud = reader.GetDecimal(nameof(Inmueble.Longitud)),
+                            Superficie = reader.GetInt32(nameof(Inmueble.Superficie)),
+                            Importe = reader.GetInt32(nameof(Inmueble.Importe)),
+                            TipoId = reader.GetInt32(nameof(Inmueble.TipoId)),
+                            Disponible = reader.GetInt32(nameof(Inmueble.Disponible)),
+                            Duenio = new Propietario
+                            {
+                                IdPropietario = reader.GetInt32(nameof(Inmueble.PropietarioId)),
+                                Nombre = reader.GetString(nameof(Propietario.Nombre)),
+                                Apellido = reader.GetString(nameof(Propietario.Apellido)),
+                            },
+                            TipoInmueble = new Tipo
+                            {
+                                IdTipo = reader.GetInt32(nameof(Inmueble.TipoId)),
+                                Descripcion = reader.GetString(nameof(Tipo.Descripcion)),
+                            }
+                        });
+                    }
+                connection.Close();
+
+            }
+            return inmuebles;
+        }
+    }
+
 }

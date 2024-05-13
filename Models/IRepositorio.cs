@@ -12,6 +12,6 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models
         int Modificacion(T p);
 
         IList<T> ObtenerTodos();
-        T ObtenerPorId(int id);
+        T? ObtenerPorId(int id);
     }
 }

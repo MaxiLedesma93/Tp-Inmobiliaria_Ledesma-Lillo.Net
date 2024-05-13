@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tp_Inmobiliaria_Ledesma_Lillo.Models;
 using Tp_Inmobiliaria_Ledesma_Lillo.Net.Controllers;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+
 
 namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers;
 
@@ -13,7 +15,8 @@ public class PropietarioController : Controller
     private readonly IRepositorioPropietario repo;
     
 
-    public PropietarioController(IRepositorioPropietario repo, ILogger<HomeController> logger, IConfiguration config)
+    public PropietarioController(IRepositorioPropietario repo, ILogger<HomeController> logger,
+     IConfiguration config)
     {   this.config = config;
         this.repo  =repo;
         _logger = logger;
@@ -47,7 +50,6 @@ public class PropietarioController : Controller
         {
             if(id > 0)
             {
-                
                 var propietario = repo.ObtenerPorId(id);
                 TempData["Mensaje"] = "Datos guardados correctamente";
                 return View(propietario);
@@ -83,12 +85,20 @@ public class PropietarioController : Controller
            if(ModelState.IsValid)
            {
                 if(propietario.IdPropietario > 0)
-                {
+                {   
                     repo.Modificacion(propietario);
+
                 }
                 else{
+                    string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+							password: propietario.Clave,
+							salt: System.Text.Encoding.ASCII.GetBytes(config["Salt"]),
+							prf: KeyDerivationPrf.HMACSHA1,
+							iterationCount: 1000,
+							numBytesRequested: 256 / 8));
+                    propietario.Clave = hashed;
                     repo.Alta(propietario);
-                    TempData["id"] = propietario.IdPropietario; 
+                    TempData["id"] = propietario.IdPropietario;
                 }
            }
            else 

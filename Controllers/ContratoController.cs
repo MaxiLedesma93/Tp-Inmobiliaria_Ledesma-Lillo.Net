@@ -11,9 +11,19 @@ public class ContratoController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     
+    private readonly IConfiguration config;
+    private readonly IRepositorioContrato repo;
 
-    public ContratoController(ILogger<HomeController> logger)
-    {
+    private readonly IRepositorioInmueble repoInmu;
+    private readonly IRepositorioInquilino repoInqui;
+    
+
+    public ContratoController(IRepositorioContrato repo, IRepositorioInmueble repoInmu,
+      ILogger<HomeController> logger, IConfiguration config, IRepositorioInquilino repoInqui)
+    {   this.config = config;
+        this.repo  =repo;
+        this.repoInqui = repoInqui;
+        this.repoInmu = repoInmu;
         _logger = logger;
     }
 
@@ -22,35 +32,21 @@ public class ContratoController : Controller
     {
         try
         {   ViewBag.dias = dias;
-            RepositorioContrato rc = new RepositorioContrato();
-            RepositorioInmueble ri = new RepositorioInmueble();
             IList<Contrato> filtrados = new List<Contrato>();
-            var lista=rc.ObtenerContratos();
-            var listaInm = ri.ObtenerInmuebles();
+            var lista=repo.ObtenerTodos();
+            var listaInm = repoInmu.ObtenerTodos();
             ViewBag.Inmuebles = listaInm;
             if(dir!=null){
-                foreach (var item in lista)
-                {
-                    if(item.Inmueble.Direccion==dir){
-                       filtrados.Add(item);
-                    }
-                }
+                filtrados = repo.ObtenerPorInmuebleDir(dir);
                 return View(filtrados);
-                
             }
             
             if(fecInf!=null&&fecSup!=null){
                
                 
-                foreach (var item in lista)
-                {
-                    if(item.FecInicio>=fecInf && item.FecFin<=fecSup){
-                       filtrados.Add(item);
-                    }
-                }
-                return View(filtrados);
+                lista=repo.ObtenerTodosVigentes((DateTime)fecInf, (DateTime)fecSup);
+                return View(lista);
                 
-
             }
             if(dias==0||dias==null){
                
@@ -65,12 +61,7 @@ public class ContratoController : Controller
             else{
                        
                 DateTime fechLim = DateTime.Today.AddDays((double)dias);
-                foreach (var item in lista)
-                {
-                    if(item.FecFin<fechLim){
-                       filtrados.Add(item);
-                    }
-                }
+                filtrados = repo.ObtenerPorFechaVenc(fechLim);
                 return View(filtrados);
             }
             
@@ -87,14 +78,12 @@ public class ContratoController : Controller
         try
         {
             if(id > 0)
-            {   RepositorioInmueble repoInmueble = new RepositorioInmueble();
-                RepositorioInquilino repoInquilino = new RepositorioInquilino();
-                RepositorioContrato rc = new RepositorioContrato();
+            {  
+               
+                ViewBag.Inmuebles = repoInmu.ObtenerTodos();               
+                ViewBag.Inquilinos = repoInqui.ObtenerTodos();
 
-                ViewBag.Inmuebles = repoInmueble.ObtenerInmuebles();               
-                ViewBag.Inquilinos = repoInquilino.ObtenerInquilinos();
-
-                var contrato = rc.ObtenerContrato(id);
+                var contrato = repo.ObtenerPorId(id);
                 TempData["Mensaje"] = "Datos guardados correctamente";
                 return View(contrato);
             }
@@ -112,12 +101,8 @@ public class ContratoController : Controller
 		{
 			try
 			{
-				RepositorioInmueble repoInmueble = new RepositorioInmueble();
-                RepositorioInquilino repoInquilino = new RepositorioInquilino();
-
-                ViewBag.Inmuebles = repoInmueble.ObtenerInmuebles();
-                ViewBag.Inquilinos = repoInquilino.ObtenerInquilinos();
-
+                ViewBag.Inmuebles = repoInmu.ObtenerTodos();
+                ViewBag.Inquilinos = repoInqui.ObtenerTodos();
                 return View();
 			}
 			catch (Exception ex)
@@ -125,11 +110,9 @@ public class ContratoController : Controller
                 return Json(new { Error = ex.Message });
 			}
 		}
-
     [Authorize]
     public IActionResult Guardar(Contrato contrato)
     {
-        RepositorioContrato rc = new RepositorioContrato();
         
         try
         {   
@@ -138,11 +121,11 @@ public class ContratoController : Controller
            {
                 if(contrato.IdContrato > 0)
                 {   
-                    rc.ModificaContrato(contrato);
+                    repo.Modificacion(contrato);
                 }
                 else{
                     
-                    rc.AltaContrato(contrato);
+                    repo.Alta(contrato);
                     TempData["id"] = contrato.IdContrato; 
                 }
            }
@@ -162,10 +145,10 @@ public class ContratoController : Controller
     [Authorize(Policy = "Administrador")]
     public IActionResult Eliminar(int id)
     {
-        RepositorioContrato rc = new RepositorioContrato();
+        
         try
         {
-            rc.EliminaContrato(id);
+            repo.Baja(id);
             TempData["Mensaje"] = "Eliminación realizada correctamente";
             return RedirectToAction(nameof(Listado));
         }
@@ -178,9 +161,9 @@ public class ContratoController : Controller
     [Authorize]
     public IActionResult Detalle(int id)
     {
-        RepositorioContrato rc = new RepositorioContrato();
+       
 
-        Contrato? contrato = rc.ObtenerContrato(id);
+        Contrato? contrato = repo.ObtenerPorId(id);
 
         ViewBag.Inquilino = contrato.Inquilino.Nombre + " " + contrato.Inquilino.Apellido; 
         ViewBag.Inmueble = contrato.Inmueble.Direccion;

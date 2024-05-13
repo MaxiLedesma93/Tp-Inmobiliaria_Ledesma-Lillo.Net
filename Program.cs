@@ -21,10 +21,14 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Administrador", policy =>
      policy.RequireRole("Administrador"));
 });
-
+builder.Services.AddTransient<IRepositorio<Propietario>, RepositorioPropietario>();
 builder.Services.AddTransient<IRepositorioPropietario, RepositorioPropietario>();
-
-
+builder.Services.AddTransient<IRepositorioContrato, RepositorioContrato>();
+builder.Services.AddTransient<IRepositorioInmueble, RepositorioInmueble>();
+builder.Services.AddTransient<IRepositorioInquilino, RepositorioInquilino>();
+builder.Services.AddTransient<IRepositorioPago, RepositorioPago>();
+builder.Services.AddTransient<IRepositorioTipo, RepositorioTipo>();
+builder.Services.AddTransient<IRepositorioUsuario, RepositorioUsuario>();
 
 
 var app = builder.Build();

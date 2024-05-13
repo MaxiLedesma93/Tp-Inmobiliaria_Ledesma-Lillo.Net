@@ -8,10 +8,19 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Controllers;
 public class InmuebleController : Controller 
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly IRepositorioPropietario repoPropietario;
+    private readonly IConfiguration config;
+    private readonly IRepositorioPropietario repoProp;
+    private readonly IRepositorioInmueble repo;
+    private readonly IRepositorioTipo repoTipo;
 
-    public InmuebleController(IRepositorioPropietario repoPropietrario, ILogger<HomeController> logger)
-    {   this.repoPropietario = repoPropietario;
+
+    public InmuebleController( IRepositorioInmueble repo, IRepositorioPropietario repoProp,
+    IRepositorioTipo repoTipo, ILogger<HomeController> logger, IConfiguration config)
+    {   
+        this.config = config;
+        this.repo = repo;
+        this.repoProp = repoProp;
+        this.repoTipo = repoTipo;
         _logger = logger;
     }
 
@@ -20,11 +29,10 @@ public class InmuebleController : Controller
     {
         try
         {
-            RepositorioTipo rp = new RepositorioTipo();
-            ViewBag.Tipos = rp.ObtenerTiposInmuebles();
+            ViewBag.Tipos = repoTipo.ObtenerTodos();
             
-            RepositorioInmueble rinmu = new RepositorioInmueble();
-            var lista = rinmu.ObtenerInmuebles();
+            
+            var lista = repo.ObtenerTodos();
             ViewBag.id = TempData["id"];
             // TempData es para pasar datos entre acciones
 				// ViewBag/Data es para pasar datos del controlador a la vista
@@ -50,13 +58,9 @@ public class InmuebleController : Controller
                 IList<String> listaDisponibilidad = new List<String>();
                 IList<String> listaUso = new List<String>();
                 cargarLista(listaDisponibilidad, listaUso);
-                
-               
-                ViewBag.Propietarios = repoPropietario.ObtenerTodos();
-                RepositorioTipo rt = new RepositorioTipo();
-                ViewBag.Tipos = rt.ObtenerTiposInmuebles();
-                RepositorioInmueble rinmu = new RepositorioInmueble();
-                var inmueble = rinmu.ObtenerInmueble(id);
+                ViewBag.Propietarios = repoProp.ObtenerTodos();
+                ViewBag.Tipos = repoTipo.ObtenerTodos();
+                Inmueble? inmueble = repo.ObtenerPorId(id);
                 ViewBag.Disponibilidad = listaDisponibilidad;
                 ViewBag.Uso = listaUso;
                 validaDisponible(inmueble);
@@ -77,10 +81,8 @@ public class InmuebleController : Controller
 		{
 			try
 			{
-				RepositorioTipo rt = new RepositorioTipo();
-                ViewBag.Tipos = rt.ObtenerTiposInmuebles();
-              
-                ViewBag.Propietarios = repoPropietario.ObtenerTodos();
+                ViewBag.Tipos = repoTipo.ObtenerTodos();
+                ViewBag.Propietarios = repoProp.ObtenerTodos();
                 return View();
 			}
 			catch (Exception ex)
@@ -92,7 +94,6 @@ public class InmuebleController : Controller
     [Authorize]
     public IActionResult Guardar(Inmueble inmueble)
     {
-        RepositorioInmueble rinmu = new RepositorioInmueble();
         
         try
         {   
@@ -102,11 +103,11 @@ public class InmuebleController : Controller
                 if(inmueble.IdInmueble > 0)
                 {   
                     disp(inmueble);
-                    rinmu.ModificaInmueble(inmueble);
+                    repo.Modificacion(inmueble);
                 }
                 else{
                     
-                    rinmu.AltaInmueble(inmueble);
+                    repo.Alta(inmueble);
                     disp(inmueble);
                     TempData["id"] = inmueble.IdInmueble; 
                 }
@@ -127,10 +128,10 @@ public class InmuebleController : Controller
     [Authorize(Policy = "Administrador")]
     public IActionResult Eliminar(int id)
     {
-        RepositorioInmueble rinmu = new RepositorioInmueble();
+       
         try
         {
-            rinmu.EliminaInmueble(id);
+            repo.Baja(id);
             TempData["Mensaje"] = "Eliminación realizada correctamente";
             return RedirectToAction(nameof(Listado));
         }
@@ -143,9 +144,9 @@ public class InmuebleController : Controller
     [Authorize]
     public IActionResult Detalle(int id)
     {
-        RepositorioInmueble rinmu = new RepositorioInmueble();
+        
 
-        Inmueble? inmu = rinmu.ObtenerInmueble(id);
+        Inmueble? inmu = repo.ObtenerPorId(id);
         ViewBag.Propietario = inmu.Duenio.Nombre + " " + inmu.Duenio.Apellido;
         ViewBag.Tipo = inmu.TipoInmueble.Descripcion;
         validaDisponible(inmu);
@@ -155,10 +156,9 @@ public class InmuebleController : Controller
     [Authorize]
     public IActionResult InmueblesSuspendidos()
     {
-        RepositorioInmueble rinmu = new RepositorioInmueble();
-        var lista = rinmu.obtenerInmueblesSuspendidos();
+        
+        var lista = repo.obtenerInmueblesSuspendidos();
         validaDisponibles(lista);
-
         return View(lista);
     }
 
@@ -170,7 +170,7 @@ public class InmuebleController : Controller
         }
     }
 
-    public void validaDisponible(Inmueble inmu)
+    public void validaDisponible(Inmueble? inmu)
     {
         if(inmu.Disponible == 0)
         {

@@ -10,5 +10,9 @@ namespace Tp_Inmobiliaria_Ledesma_Lillo.Models
           IList<Contrato> ObtenerPorInmuebleId(int id);
         IList<Contrato> ObtenerTodosVigentes(DateTime fechaInicio, DateTime fechaFin);
         
+        IList<Contrato> ObtenerPorInmuebleDir(string dir);
+
+        IList<Contrato> ObtenerPorFechaVenc(DateTime fechaFin);
+
     }
 }
