@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Tp_Inmobiliaria_Ledesma_Lillo.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.UseUrls("http://localhost:5000","https://localhost:5001", "http://*:5000", "https://*:5001");
+builder.WebHost.UseUrls("http://localhost:5000");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -35,7 +35,7 @@ builder.Services.AddTransient<IRepositorioUsuario, RepositorioUsuario>();
 var app = builder.Build();
 
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 app.UseCors(x => x
 	.AllowAnyOrigin()
 	.AllowAnyMethod()
