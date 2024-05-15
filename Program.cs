@@ -35,7 +35,7 @@ builder.Services.AddTransient<IRepositorioUsuario, RepositorioUsuario>();
 var app = builder.Build();
 
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseCors(x => x
 	.AllowAnyOrigin()
 	.AllowAnyMethod()

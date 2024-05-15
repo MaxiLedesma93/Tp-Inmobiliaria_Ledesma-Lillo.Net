@@ -30,8 +30,6 @@ public class InmuebleController : Controller
         try
         {
             ViewBag.Tipos = repoTipo.ObtenerTodos();
-            
-            
             var lista = repo.ObtenerTodos();
             ViewBag.id = TempData["id"];
             // TempData es para pasar datos entre acciones
